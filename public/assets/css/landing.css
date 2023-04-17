@@ -1,0 +1,294 @@
+.landing-yellow-bg {
+    background-color: #FFF61F;
+}
+
+.landing-yellow-color {
+    color: #FFF61F;
+}
+
+.landing-blue-color {
+    color: #1D60AB;
+}
+
+.landing-blue-bg {
+    background-color: #1D60AB;
+}
+
+.text-blue-accent {
+    color: #1D60AB;
+}
+
+.box {
+    border: 1px solid #E6E6E6;
+}
+
+.btn-muted {
+    border: 1px solid #CFCFCF !important;
+    color: #CFCFCF !important;
+}
+
+.card .pd-card-body {
+    padding: 2rem 1rem !important;
+}
+
+.landing-header-custom .menu .menu-link.active {
+    color: #1D60AB !important;
+}
+
+.landing-menu-sidebar {
+    font-weight: 600;
+}
+
+.landing-menu-sidebar.active {
+    background-color: #1D60AB !important;
+}
+
+.collapse-event {
+    display: none;
+}
+
+.collapse-sponsor {
+    display: none;
+}
+
+.menu-sponsor {
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: black;
+    padding-left: 0 !important;
+    margin-right: 20px;
+}
+
+.menu-sponsor:hover {
+    color: #1D60AB !important;
+}
+
+.menu-sponsor.active {
+    color: #1D60AB !important;
+    border-bottom: solid 1px #1D60AB;
+}
+
+a.more-event>p:hover {
+    color: #1D60AB !important;
+}
+
+
+/* Accordion */
+
+.content-accordion {
+    display: none;
+}
+
+.item-accordion.active>.content-accordion {
+    display: block;
+}
+
+.item-accordion.active>.heading-accordion {
+    color: white;
+    background-color: black;
+}
+
+.heading-accordion {
+    padding: 16px;
+    margin: 8px;
+    background-color: lightgrey;
+}
+
+
+/* Organizer */
+
+.collapse-cstm {
+    display: none;
+}
+
+.disbled-box {
+    background-color: #ededed;
+    opacity: 62%;
+    height: 100%;
+    width: 100%;
+}
+
+.bg-grey-cstm {
+    background-color: #A7A8BB;
+}
+
+.bg-grey-cstm.hoverable:hover {
+    background-color: #1D60AB !important;
+}
+
+.rounded-18px {
+    border-radius: 18px !important;
+}
+
+.grid-5-cstm {
+    min-width: 250px;
+    max-width: 250px;
+}
+
+@media screen and (max-width: 992px) {
+    .grid-5-cstm {
+        max-width: 100% !important;
+    }
+}
+
+.wrap-profile {
+    max-width: 75%;
+    margin: 0 auto;
+    position: relative;
+}
+
+h4.small-heading {
+    /* font-family: 'Ubuntu'; */
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
+    color: #FFFFFF;
+}
+
+.heading-header {
+    /* font-family: 'Ubuntu'; */
+    font-style: normal;
+    font-weight: 700;
+    font-size: 70px;
+    line-height: 80px;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.poppins {
+    font-family: 'Poppins';
+}
+
+.heading-body {
+    /* font-family: 'Ubuntu'; */
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 34px;
+    text-align: center;
+    color: #122BA9;
+}
+
+.color-default {
+    color: #3B68FF;
+}
+
+.landing-grey-bg {
+    background: #F5F5F5;
+}
+
+
+/* Style the search field */
+
+form.search-footer input[type=text] {
+    padding: 10px;
+    font-size: 17px;
+    border: 1px solid grey;
+    float: left;
+    width: 80%;
+    background: #fff;
+}
+
+
+/* Style the submit button */
+
+::placeholder {
+    color: #C4C4C4;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+form.search-footer button {
+    float: left;
+    width: 20%;
+    padding: 10px;
+    background: #122BA9;
+    color: white;
+    font-size: 17px;
+    border: 1px solid grey;
+    border-left: none;
+    /* Prevent double borders */
+    cursor: pointer;
+}
+
+form.search-footer button:hover {
+    background: #122BA9;
+}
+
+
+/* Clear floats */
+
+form.search-footer::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.search-header {
+    border-radius: 10px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.button-search-header {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+
+/* Tab */
+
+a.tab-event {
+    border-radius: 20px !important;
+    background: #FAFAFA;
+}
+
+a.tab-event.active {
+    background: #F5F5F5;
+    border: 1px solid #DEDEDE;
+}
+
+a.tab-livemeet {
+    background: #ffff !important;
+    border: 1px solid #E5E5E5 !important;
+    box-shadow: 0px 4px 14px -5px rgba(0, 0, 0, 0.25);
+}
+
+.fading-black {
+    color: #585858 !important;
+}
+
+.fs-italic {
+    font-style: italic;
+}
+
+.button-blue {
+    background-color: #122BA9;
+    color: #fff;
+}
+
+.button-blue:hover {
+    background-color: #0f2383 !important;
+    color: #fff !important;
+}
+
+.btn-live-meeting {
+    border: 2px solid #0768E1 !important;
+    color: #0768E1;
+}
+
+.btn-logout-live-meeting {
+    border: 2px solid #F82E2E !important;
+    color: #F82E2E !important;
+}
+
+.list-tiket {
+    background-color: #fff;
+}
+
+.list-tiket>h3 {
+    color: #122BA9;
+}
