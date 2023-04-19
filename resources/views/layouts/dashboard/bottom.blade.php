@@ -28,9 +28,6 @@
 			@if($message=Session::get('error'))
 				 toastr.error("{{$message}}");
 			@endif
-			@if($message=Session::get('gagal'))
-				 toastr.warning("{{$message}}");
-			@endif
 		 </script>
 		@yield('scriptcustom')
 		<!--end::Page Custom Javascript-->

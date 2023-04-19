@@ -18,170 +18,23 @@
 												</svg>
 											</span>
 											<!--end::Svg Icon-->
-											</span>
-												<span class="menu-title">Dashboard</span>
-											</span>
-										</a>
-								</div>
+										</span>
+											<span class="menu-title">Dashboard</span>
+										</span>
+									 </a>
+								  </div>
 								
-
-								<div class="menu-item">
-									<div class="menu-content pt-8 pb-0">
-										<span class="menu-section text-muted text-uppercase fs-8 ls-1">Data</span>
-									</div>
-								</div>
-								
-								<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-									<span class="menu-link">
-										<span class="menu-icon">
-											<!--begin::Svg Icon | path: icons/duotune/abstract/abs042.svg-->
-											<span class="svg-icon svg-icon-2">
-												<i class="fa fa-users"></i>
-											</span>
-											<!--end::Svg Icon-->
-										</span>
-										<span class="menu-title">User</span>
-										<span class="menu-arrow"></span>
-									</span>
-									<div class="menu-sub menu-sub-accordion menu-active-bg">
-										<div class="menu-item">
-											<a class="menu-link" href="{{url('user/manager_index')}}">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Ahli Gizi</span>
-											</a>
-										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="{{url('user/teller_index')}}">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Bidan</span>
-											</a>
-										</div>
-										<div class="menu-item">
-											<a class="menu-link" href="{{url('user/financing_service_index')}}">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Kepala Puskesma</span>
-											</a>
-										</div>
-									</div>
-								</div>
-							
-								<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-									<span class="menu-link">
-										<span class="menu-icon">
-											<span class="svg-icon svg-icon-2">
-												<i class="fa fa-medkit"></i>
-											</span>
-											<!--end::Svg Icon-->
-										</span>
-											<span class="menu-title">Posyandu</span>
-											<span class="menu-arrow"></span>
-										</span>
-										<div class="menu-sub menu-sub-accordion menu-active-bg">
-									
-											<div class="menu-item">
-												<a class="menu-link" href="{{url('/layanan/customer_service_submission_index')}}">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title">Data Pos</span>
-												</a>
-											</div>
-										
-											<div class="menu-sub menu-sub-accordion menu-active-bg">
-												<div class="menu-item">
-													<a class="menu-link" href="{{url('/layanan/financing_service_submission_index')}}">
-														<span class="menu-bullet">
-															<span class="bullet bullet-dot"></span>
-														</span>
-														<span class="menu-title">Data Balita</span>
-													</a>
-												</div>
-											</div>
-										
-											<div class="menu-sub menu-sub-accordion menu-active-bg">
-												<div class="menu-item">
-													<a class="menu-link" href="{{url('/layanan/teller_submission_index')}}">
-														<span class="menu-bullet">
-															<span class="bullet bullet-dot"></span>
-														</span>
-														<span class="menu-title">Data Hasil</span>
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>
-
-								<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-									<span class="menu-link">
-										<span class="menu-icon">
-											<span class="svg-icon svg-icon-2">
-												<i class="fa fa-file-excel-o"></i>
-											</span>
-											<!--end::Svg Icon-->
-										</span>
-											<span class="menu-title">Laporan</span>
-											<span class="menu-arrow"></span>
-										</span>
-										<div class="menu-sub menu-sub-accordion menu-active-bg">
-									
-											<div class="menu-item">
-												<a class="menu-link" href="{{url('/layanan/customer_service_submission_index')}}">
-													<span class="menu-bullet">
-														<span class="bullet bullet-dot"></span>
-													</span>
-													<span class="menu-title">Data User</span>
-												</a>
-											</div>
-										
-											<div class="menu-sub menu-sub-accordion menu-active-bg">
-												<div class="menu-item">
-													<a class="menu-link" href="{{url('/layanan/financing_service_submission_index')}}">
-														<span class="menu-bullet">
-															<span class="bullet bullet-dot"></span>
-														</span>
-														<span class="menu-title">Data Balita</span>
-													</a>
-												</div>
-											</div>
-										
-											<div class="menu-sub menu-sub-accordion menu-active-bg">
-												<div class="menu-item">
-													<a class="menu-link" href="{{url('/layanan/teller_submission_index')}}">
-														<span class="menu-bullet">
-															<span class="bullet bullet-dot"></span>
-														</span>
-														<span class="menu-title">Data Posyandu</span>
-													</a>
-												</div>
-											</div>
-
-											<div class="menu-sub menu-sub-accordion menu-active-bg">
-												<div class="menu-item">
-													<a class="menu-link" href="{{url('/layanan/teller_submission_index')}}">
-														<span class="menu-bullet">
-															<span class="bullet bullet-dot"></span>
-														</span>
-														<span class="menu-title">Data Hasil</span>
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>
+								  @php $roleLoggedIn = Auth::user()->role; @endphp
+								  @include('layouts.dashboard.'.$roleLoggedIn.'')
 
 									<div class="menu-item">
-										<div class="menu-content">
-											<div class="separator mx-1 my-4"></div>
+										<div class="menu-content pt-8 pb-0">
+											<span class="menu-section text-muted text-uppercase fs-8 ls-1">Anda</span>
 										</div>
 									</div>
 
 									<div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
-										<a  href="{{url('home')}}">
+										<a  href="{{url('profile')}}">
 											<span class="menu-link">
 											<span class="menu-icon">
 												<!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -196,7 +49,8 @@
 									</div>
 
 									<div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
-										<a  href="{{url('home')}}">
+										<a  href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
 											<span class="menu-link">
 											<span class="menu-icon">
 												<!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -208,6 +62,9 @@
 													<span class="menu-title">Keluar</span>
 											</span>
 										</a>
+										<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        	@csrf
+                                    	</form>
 									</div>
 
 								</div>
