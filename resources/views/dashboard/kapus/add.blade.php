@@ -65,7 +65,7 @@
                                     <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
                                         title="Alamat Lengkap"></i>
                                 </label>
-                                <input type="text" required class="form-control form-control-solid" name="no_tlp"
+                                <input type="number" required class="form-control form-control-solid" name="no_tlp"
                                     value="" placeholder="Cth : 085608xxxxxx" />
                             </div>
                             <div class="fv-row mb-7">

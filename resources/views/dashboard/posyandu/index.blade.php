@@ -104,6 +104,11 @@
                                                         class="menu-link px-3"
                                                         data-kt-users-table-filter="delete_row">Delete</a>
                                                 </div>
+                                                <div class="menu-item px-3">
+                                                    <a href="{{ url('data/posyandu/kader/' . $item->id) }}"
+                                                        class="menu-link px-3"
+                                                        data-kt-users-table-filter="edit_row">Kader</a>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
