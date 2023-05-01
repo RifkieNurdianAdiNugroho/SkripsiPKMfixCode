@@ -47,6 +47,66 @@ class PosyanduController extends Controller
         return view('dashboard.posyandu.edit',compact('data'));
     }
 
+    public function kader($id)
+    {
+       $data = DB::table('posyandu as kp')
+                ->where('kp.id',$id)
+                ->first();
+        if(!$data)
+        {
+            return redirect('data/posyandu')->with('error','Tidak dapat menemukan data Pos');
+        }
+        $kader = DB::table('kader')->get();
+        $kader = json_decode(json_encode($kader),true);
+        $kaderArr = [];
+        foreach ($kader as $key => $value) 
+        {
+            $check = DB::table('posyandu_kader')
+            ->where('kader_id',$value['id'])
+            ->where('hide','no')
+            ->where('posyandu_id',$id)
+            ->first();
+            if($check)
+            {
+                array_push($kaderArr, $check->kader_id);
+            }
+        }
+        return view('dashboard.posyandu.kader',compact('data','kaderArr','kader'));
+    }
+
+    public function kaderStore(Request $request)
+    {
+        $kaderSelected = $request->kader_id;
+        if(count($kaderSelected) < 0)
+        {
+            return redirect()->back()->with('error','Minimal harus memilih salah satu kader');
+        }
+        DB::table('posyandu_kader')->where('posyandu_id',$request->posyandu_id)->update(['hide'=>'yes']);
+        $createdAt = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
+        foreach ($kaderSelected as $key => $value) 
+        {
+            $data = DB::table('posyandu_kader')
+            ->where('kader_id',$value)
+            ->where('posyandu_id',$request->posyandu_id)
+            ->first();
+            if($data)
+            {
+                DB::table('posyandu_kader')
+                ->where('kader_id',$value)
+                ->where('posyandu_id',$request->posyandu_id)
+                ->update(['hide'=>'no']);
+            }else{
+                DB::table('posyandu_kader')->insert([
+                    'posyandu_id'=>$request->posyandu_id,
+                    'kader_id'=>$value,
+                    'hide'=>'no',
+                    'created_at'=>$createdAt
+                ]);
+            }
+        }
+         return redirect()->back()->with('success','Berhasil menambahkan kader');
+    }
+
     public function update(Request $request,$id)
     {
 
