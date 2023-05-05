@@ -75,6 +75,21 @@
 									 </a>
 								  </div>
 
+								  <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
+									<a  href="{{url('data/jadwal/posyandu')}}">
+									<span class="menu-link">
+										<span class="menu-icon">
+											<span class="svg-icon svg-icon-2">
+												<i class="fa fa-calendar"></i>
+											</span>
+										</span>
+											<span class="menu-title">Jadwal Posyandu</span>
+										</span>
+									 </a>
+								  </div>
+
+
+
 								   <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
 									<a  href="{{url('data/balita')}}">
 									<span class="menu-link">
