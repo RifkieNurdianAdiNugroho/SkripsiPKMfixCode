@@ -8,6 +8,7 @@ use App\Http\Controllers\KapusController;
 use App\Http\Controllers\PosyanduController;
 use App\Http\Controllers\BalitaController;
 use App\Http\Controllers\KaderController;
+use App\Http\Controllers\JadwalPosController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -64,6 +65,19 @@ Route::prefix('data')->group(function () {
         Route::post('/store', [PosyanduController::class, 'store']);
         Route::post('/kader_store', [PosyanduController::class, 'kaderStore']);
         Route::post('/update/{id}', [PosyanduController::class, 'update']);
+    });
+
+     Route::prefix('jadwal')->group(function () {
+        Route::prefix('posyandu')->group(function () {
+            Route::get('/', [JadwalPosController::class, 'index']);
+            Route::get('/create', [JadwalPosController::class, 'create']);
+            Route::get('/edit/{id}', [JadwalPosController::class, 'edit']);
+            Route::get('/delete/{id}', [JadwalPosController::class, 'delete']);
+            Route::post('/store', [JadwalPosController::class, 'store']);
+            Route::post('/update/{id}', [JadwalPosController::class, 'update']);
+        });
+
+      
     });
     Route::prefix('balita')->group(function () {
         Route::get('/', [BalitaController::class, 'index']);
