@@ -88,7 +88,18 @@
 									 </a>
 								  </div>
 
-
+								  <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
+									<a  href="{{url('data/jadwal/vitamin')}}">
+									<span class="menu-link">
+										<span class="menu-icon">
+											<span class="svg-icon svg-icon-2">
+												<i class="fa fa-calendar-alt"></i>
+											</span>
+										</span>
+											<span class="menu-title">Jadwal Vitamin</span>
+										</span>
+									 </a>
+								  </div>
 
 								   <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
 									<a  href="{{url('data/balita')}}">
