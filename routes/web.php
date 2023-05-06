@@ -9,6 +9,7 @@ use App\Http\Controllers\PosyanduController;
 use App\Http\Controllers\BalitaController;
 use App\Http\Controllers\KaderController;
 use App\Http\Controllers\JadwalPosController;
+use App\Http\Controllers\JadwalVitaminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -77,7 +78,14 @@ Route::prefix('data')->group(function () {
             Route::post('/update/{id}', [JadwalPosController::class, 'update']);
         });
 
-      
+        Route::prefix('vitamin')->group(function () {
+            Route::get('/', [JadwalVitaminController::class, 'index']);
+            Route::get('/create', [JadwalVitaminController::class, 'create']);
+            Route::get('/edit/{id}', [JadwalVitaminController::class, 'edit']);
+            Route::get('/delete/{id}', [JadwalVitaminController::class, 'delete']);
+            Route::post('/store', [JadwalVitaminController::class, 'store']);
+            Route::post('/update/{id}', [JadwalVitaminController::class, 'update']);
+        });
     });
     Route::prefix('balita')->group(function () {
         Route::get('/', [BalitaController::class, 'index']);
