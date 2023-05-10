@@ -5,31 +5,68 @@
 								 </div>
 
 								  <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
-									<a  href="{{url('data/posyandu')}}">
-									<span class="menu-link">
-										<span class="menu-icon">
-											<!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-											<span class="svg-icon svg-icon-2">
-												<i class="fa fa-medkit"></i>
-											</span>
-											<!--end::Svg Icon-->
-										</span>
-											<span class="menu-title">Posyandu</span>
-										</span>
-									 </a>
-								  </div>
-
-								   <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
 									<a  href="{{url('data/balita')}}">
 									<span class="menu-link">
 										<span class="menu-icon">
-											<!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
 											<span class="svg-icon svg-icon-2">
-												<i class="fa fa-medkit"></i>
+												<i class="fas fa-baby"></i>
 											</span>
-											<!--end::Svg Icon-->
 										</span>
 											<span class="menu-title">Balita</span>
 										</span>
 									 </a>
 								  </div>
+
+								  <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
+									<a  href="{{url('data/kader')}}">
+									<span class="menu-link">
+										<span class="menu-icon">
+											<span class="svg-icon svg-icon-2">
+												<i class="fa fa-user"></i>
+											</span>
+										</span>
+											<span class="menu-title">Kader</span>
+										</span>
+									 </a>
+								  </div>
+
+								   <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
+									<a  href="{{url('data/jadwal/posyandu')}}">
+									<span class="menu-link">
+										<span class="menu-icon">
+											<span class="svg-icon svg-icon-2">
+												<i class="fa fa-calendar"></i>
+											</span>
+										</span>
+											<span class="menu-title">Jadwal Posyandu</span>
+										</span>
+									 </a>
+								  </div>
+
+								  <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
+									<a  href="{{url('data/jadwal/vitamin')}}">
+									<span class="menu-link">
+										<span class="menu-icon">
+											<span class="svg-icon svg-icon-2">
+												<i class="fa fa-calendar-alt"></i>
+											</span>
+										</span>
+											<span class="menu-title">Jadwal Vitamin</span>
+										</span>
+									 </a>
+								  </div>
+
+								  <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
+									<a  href="{{url('data/jadwal/timbang')}}">
+									<span class="menu-link">
+										<span class="menu-icon">
+											<span class="svg-icon svg-icon-2">
+												<i class="fa fa-balance-scale"></i>
+											</span>
+										</span>
+											<span class="menu-title">Data Timbang</span>
+										</span>
+									 </a>
+								  </div>
+
+
