@@ -10,6 +10,7 @@ use App\Http\Controllers\BalitaController;
 use App\Http\Controllers\KaderController;
 use App\Http\Controllers\JadwalPosController;
 use App\Http\Controllers\JadwalVitaminController;
+use App\Http\Controllers\DataTimbangController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -85,6 +86,15 @@ Route::prefix('data')->group(function () {
             Route::get('/delete/{id}', [JadwalVitaminController::class, 'delete']);
             Route::post('/store', [JadwalVitaminController::class, 'store']);
             Route::post('/update/{id}', [JadwalVitaminController::class, 'update']);
+        });
+
+        Route::prefix('timbang')->group(function () {
+            Route::get('/', [DataTimbangController::class, 'index']);
+            Route::get('/create', [DataTimbangController::class, 'create']);
+            Route::get('/edit/{id}', [DataTimbangController::class, 'edit']);
+            Route::get('/delete/{id}', [DataTimbangController::class, 'delete']);
+            Route::post('/store', [DataTimbangController::class, 'store']);
+            Route::post('/update/{id}', [DataTimbangController::class, 'update']);
         });
     });
     Route::prefix('balita')->group(function () {
