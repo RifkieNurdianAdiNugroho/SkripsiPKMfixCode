@@ -90,8 +90,8 @@ Route::prefix('data')->group(function () {
 
         Route::prefix('timbang')->group(function () {
             Route::get('/', [DataTimbangController::class, 'index']);
-            Route::get('/create', [DataTimbangController::class, 'create']);
-            Route::get('/edit/{id}', [DataTimbangController::class, 'edit']);
+            Route::get('/create/{id}', [DataTimbangController::class, 'create']);
+            Route::get('/edit/{pos_id}/{id}', [DataTimbangController::class, 'edit']);
             Route::get('/delete/{id}', [DataTimbangController::class, 'delete']);
             Route::post('/store', [DataTimbangController::class, 'store']);
             Route::post('/update/{id}', [DataTimbangController::class, 'update']);
