@@ -68,6 +68,7 @@
                                     <th class="min-w-125px">Naman Pos</th>
                                     <th class="min-w-125px">Bidan</th>
                                     <th class="min-w-125px">Tanggal</th>
+                                    <th class="min-w-125px">Vitamin</th>
                                     <th class="text-end min-w-100px">Actions</th>
                                 </tr>
                             </thead>
@@ -78,6 +79,7 @@
                                         <td>{{ $item->posyandu_name }}</td>
                                         <td>{{ $item->bidan_name }}</td>
                                         <td>{{ $item->tanggal }}</td>
+                                        <td>{{ $item->vitamin }}</td>
                                         <td class="text-end">
                                             <a href="#" class="btn btn-light btn-active-light-primary btn-sm"
                                                 data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
