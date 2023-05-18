@@ -38,6 +38,7 @@ class JadwalVitaminController extends Controller
             'posyandu_id'=>$request->posyandu_id,
             'bidan_id'=>$request->bidan_id,
             'jenis'=>'vitamin',
+            'vitamin'=>$request->vitamin,
             'tanggal'=>$request->tanggal,
             'created_at'=>$createdAt
         ]);
@@ -69,6 +70,7 @@ class JadwalVitaminController extends Controller
             'posyandu_id'=>$request->posyandu_id,
             'bidan_id'=>$request->bidan_id,
             'jenis'=>'vitamin',
+            'vitamin'=>$request->vitamin,
             'tanggal'=>$request->tanggal,
             'updated_at'=>$createdAt
         ]);
