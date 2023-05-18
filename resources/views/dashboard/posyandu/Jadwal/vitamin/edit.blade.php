@@ -63,6 +63,16 @@
                                 </select>
                             </div>
 
+                            <div class="fv-row mb-7">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Vitamin</span>
+                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
+                                        title="Nama Vitamin"></i>
+                                </label>
+                                <input type="text" required class="form-control form-control-solid" name="vitamin"
+                                    value="{{$data->vitamin}}" placeholder="Cth : Vit A Biru" />
+                            </div>
+
                              <div class="fv-row mb-7">
                                 <label class="fs-6 fw-bold form-label mt-3">
                                     <span class="required">Tanggal</span>
