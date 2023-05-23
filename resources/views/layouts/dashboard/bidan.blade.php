@@ -12,7 +12,7 @@
 												<i class="fas fa-baby"></i>
 											</span>
 										</span>
-											<span class="menu-title">Balita</span>
+											<span class="menu-title">Data Balita Baru</span>
 										</span>
 									 </a>
 								  </div>
