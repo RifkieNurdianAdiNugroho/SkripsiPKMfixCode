@@ -13,91 +13,160 @@ class DataTimbangController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        //dd($request->all());
         $userId = Auth::user()->id;
+        $role = Auth::user()->role;
         $bidan = DB::table('bidan')->where('user_id',$userId)->first();
-        $data = DB::table('posyandu_jadwal as pj')
-                ->join('bidan as bd','bd.id','=','pj.bidan_id')
-                ->join('posyandu as pd','pd.id','=','pj.posyandu_id')
-                ->where('pj.bidan_id',$bidan->id)
-                ->where('pj.jenis','posyandu')
-                ->select('bd.nama as bidan_name','pj.tanggal','pj.jenis as jadwal_type','pd.nama_pos as posyandu_name')
-                ->orderBy('pj.tanggal')
-                ->get();
-        $now = Carbon::now('Asia/Jakarta')->format('Y-m-d');
-        return view('dashboard.timbang.index',compact('data','now'));
-    }
 
-    public function create($id)
-    {
-        $userId = Auth::user()->id;
-        $bidan = DB::table('bidan')->where('user_id',$userId)->first();
-        $jadwal = DB::table('posyandu_jadwal')->where('id',$id)->get();
-        $balita = DB::table('balita')->get();
-        $hasil = DB::table('posyandu_hasil as ph')
-                 ->join('balita as bt','bt.id','=','ph.balita_id')
-                 ->where('ph.jadwal_id',$id)
-                 ->select('bt.nama as balita_name','ph.*')
-                 ->get();
-        return view('dashboard.timbang.add',compact('jadwal','bidan','balita','hasil'));
+        $getJadwal = DB::table('posyandu_jadwal as pj');
+        $getJadwal->join('bidan as bd','bd.id','=','pj.bidan_id');
+        $getJadwal->join('posyandu as pd','pd.id','=','pj.posyandu_id');
+        if($role == 'bidan')
+        {
+            $getJadwal->where('pj.bidan_id',$bidan->id);
+        }else{
+            if($request->bidan_id != null)
+            {
+                $getJadwal->where('pj.bidan_id',$request->bidan_id);
+            }
+        }
+        $getJadwal->where('pj.jenis','posyandu');
+        if($request->pos_id != null)
+        {
+            $getJadwal->where('pd.id',$request->pos_id);
+        }
+        if($request->start_month != null && $request->end_month == null)
+        {
+            $start = explode('-', $request->start_month);
+            $getJadwal->whereMonth('pj.tanggal','=',$start[1]);
+        }
+        if($request->start_month == null && $request->end_month != null)
+        {
+            $end = explode('-', $request->end_month);
+            $getJadwal->whereMonth('pj.tanggal','=',$end[1]);
+        }
+        if($request->start_month != null && $request->end_month != null)
+        {
+            $start = $request->start_month.'-01';
+            //$start = Carbon::parse($start)->addMonths(1)->format('Y-m-d');
+           // $start = Carbon::parse($start)->subDays(1)->format('Y-m-d');
+            $end = $request->end_month.'-01';
+            $end = Carbon::parse($end)->addMonths(1)->format('Y-m-d');
+            $end = Carbon::parse($end)->subDays(1)->format('Y-m-d');
+            $arr = [$start,$end];
+            $getJadwal->whereBetween('pj.tanggal',$arr);
+            //dd($arr);
+        }
+        $getJadwal->select('bd.nama as bidan_name','pj.tanggal','pd.id as posyandu_id','bd.id as bidan_id'
+                        ,'pj.jenis as jadwal_type','pd.nama_pos as posyandu_name','pj.id');
+        $getJadwal->orderBy('pj.tanggal');
+        $jadwal = $getJadwal->get();
+        $getBalita = DB::table('balita');
+        if($request->balita != null)
+        {
+            $getBalita->where('nama', 'like', '%' . $request->balita . '%');
+        }
+        if($request->ortu != null)
+        {
+            $getBalita->where('nama_ortu', 'like', '%' . $request->ortu . '%');
+        }
+        $balita = $getBalita->get();
+        $posyandu = DB::table('posyandu')->get();
+        $now = Carbon::now('Asia/Jakarta')->format('Y-m-d');
+        $data = [];
+        if(count($request->all()) > 0)
+        {
+            foreach ($jadwal as $jadwalKey => $jadwalValue) 
+            {
+                $bulan = Carbon::parse($jadwalValue->tanggal)->locale('id')
+                        ->settings(['formatFunction' => 'translatedFormat'])
+                        ->format('F');
+                $data['bulan'][$jadwalKey] = $bulan;
+                $data['jadwal'][$jadwalKey]['bidan_id'] = $jadwalValue->bidan_id;
+                $data['jadwal'][$jadwalKey]['pos_id'] = $jadwalValue->posyandu_id;
+                $data['jadwal'][$jadwalKey]['jadwal_id'] = $jadwalValue->id;
+                foreach ($balita as $balitaKey => $balitaValue) 
+                {
+                    $jadwalDate = Carbon::parse($jadwalValue->tanggal);
+                    $tglLahir =  Carbon::parse($balitaValue->tgl_lahir);
+                    $umur = Carbon::parse($tglLahir)->diffInMonths($jadwalDate);
+                    $data['balita'][$balitaKey]['pos']= $jadwalValue->posyandu_name;
+                    $data['balita'][$balitaKey]['balita_id'] = $balitaValue->id;
+                    $data['balita'][$balitaKey]['nama']= $balitaValue->nama;
+                    $data['balita'][$balitaKey]['ortu']= $balitaValue->nama_ortu;
+                    $data['balita'][$balitaKey]['status_gizi'] = 'Belum Dihitung';
+                    $data['hasil'][$jadwalValue->id][$balitaKey]['umur'] = $umur;
+                    $data['hasil'][$jadwalValue->id][$balitaKey]['tb'] = '';
+                    $data['hasil'][$jadwalValue->id][$balitaKey]['bb'] = '';
+                    $hasil = DB::table('posyandu_hasil')
+                            ->where('jadwal_id',$jadwalValue->id)
+                            ->where('balita_id',$balitaValue->id)
+                            ->first();
+                    if($hasil)
+                    {
+                        $data['hasil'][$jadwalValue->id][$balitaKey]['tb'] = $hasil->tb;
+                        $data['hasil'][$jadwalValue->id][$balitaKey]['bb'] = $hasil->bb;
+                    }
+                }
+            }
+        }
+        $bidan = DB::table('bidan')->get();
+        return view('dashboard.timbang.index',compact('data','now','posyandu','request','bidan','role'));
     }
 
     public function store(Request $request)
     {
-        $userId = Auth::user()->id;
-        $bidan = DB::table('bidan')->where('user_id',$userId)->first();
         $createdAt = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
-        DB::table('posyandu_hasil')->insert([
-            'bidan_id'=>$bidan->id,
-            'jadwal_id'=>$request->jadwal_id,
-            'balita_id'=>$request->balita_id,
-            'umur'=>$request->umur,
-            'tb'=>$request->tb,
-            'bb'=>$request->bb,
-            'created_at'=>$createdAt
-        ]);
-
-
-        return redirect()->back()->with('success','Berhasil menambahakan data Timbangan');
-    }
-
-    public function edit($id)
-    {
-        $data = DB::table('kader as bd')
-                ->where('bd.id',$id)
-                ->first();
-        if(!$data)
+        $jadwal_id = $request->jadwal_id;
+        if($request->balita_id)
         {
-            return redirect('data/jadwal/timbang')->with('error','Tidak dapat menemukan data Timbangan');
-        }
-        return view('dashboard.timbang.edit',compact('data'));
-    }
-
-    public function update(Request $request,$id)
-    {
-
-       $createdAt = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
-
-            DB::table('kader')->where('id',$id)->update([
-                'nama'=>$request->nama,
-                'no_tlp'=>$request->no_tlp,
-                'alamat'=>$request->alamat,
-                'updated_at'=>$createdAt,
-            ]);
-
-        return redirect('data/kader')->with('success','Berhasil mengubah data Timbangan');
-    }
-
-    public function delete($id)
-    {
-        $data = DB::table('kader')->where('id',$id)->first();
-        if($data)
-        {
-            DB::table('kader')->where('id',$id)->delete();
-            return redirect('data/kader')->with('success','Berhasil menghapus data Timbangan');
+            foreach ($request->balita_id as $key => $value) 
+            {
+                foreach ($jadwal_id as $jadwalKey => $jadwalValue) 
+                {
+                    $umur = $request->umur[$value][$jadwalValue];
+                    $tb = $request->tb[$value][$jadwalValue];
+                    $bidan_id = $request->bidan_id;
+                    $bb = $request->bb[$value][$jadwalValue];
+                    $check = DB::table('posyandu_hasil')->where('jadwal_id',$jadwalValue)->where('balita_id',$value)->first();
+                    //dd($check);
+                    if($check)
+                    {
+                        DB::table('posyandu_hasil')->where('id',$check->id)->update([
+                            'balita_id'=>$value,
+                            'bidan_id'=>$bidan_id,
+                            'jadwal_id'=>$jadwalValue,
+                            'tb'=>$tb,
+                            'bb'=>$bb,
+                            'umur'=>$umur,
+                            'updated_at'=>$createdAt
+                        ]);
+                    }else
+                    {
+                        //return $jadwalValue.' - '.$value;
+                        DB::table('posyandu_hasil')->insert([
+                            'balita_id'=>$value,
+                            'bidan_id'=>$bidan_id,
+                            'jadwal_id'=>$jadwalValue,
+                            'tb'=>$tb,
+                            'bb'=>$bb,
+                            'umur'=>$umur,
+                            'created_at'=>$createdAt
+                        ]);
+                    }
+                }
+            }
+            return redirect()->back()->with('success','Berhasil menambahakan data timbangan');
         }else{
-            return redirect('data/kader')->with('error','Tidak dapat menemukan data Timbangan');
+            return redirect()->back()->with('error','Filter data terlebih dahulu!');
         }
+    }
+
+    public function calculateSaw()
+    {
+        //step 1
+        
     }
 }
