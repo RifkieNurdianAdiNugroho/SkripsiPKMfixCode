@@ -15,7 +15,6 @@ class DataTimbangController extends Controller
 
     public function index(Request $request)
     {
-        //dd($request->all());
         $userId = Auth::user()->id;
         $role = Auth::user()->role;
         $bidan = DB::table('bidan')->where('user_id',$userId)->first();
@@ -50,14 +49,12 @@ class DataTimbangController extends Controller
         if($request->start_month != null && $request->end_month != null)
         {
             $start = $request->start_month.'-01';
-            //$start = Carbon::parse($start)->addMonths(1)->format('Y-m-d');
-           // $start = Carbon::parse($start)->subDays(1)->format('Y-m-d');
+
             $end = $request->end_month.'-01';
             $end = Carbon::parse($end)->addMonths(1)->format('Y-m-d');
             $end = Carbon::parse($end)->subDays(1)->format('Y-m-d');
             $arr = [$start,$end];
             $getJadwal->whereBetween('pj.tanggal',$arr);
-            //dd($arr);
         }
         $getJadwal->select('bd.nama as bidan_name','pj.tanggal','pd.id as posyandu_id','bd.id as bidan_id'
                         ,'pj.jenis as jadwal_type','pd.nama_pos as posyandu_name','pj.id');
@@ -118,55 +115,172 @@ class DataTimbangController extends Controller
 
     public function store(Request $request)
     {
+        //dd($request->all());
         $createdAt = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
         $jadwal_id = $request->jadwal_id;
         if($request->balita_id)
         {
-            foreach ($request->balita_id as $key => $value) 
+            if($request->hitung)
             {
-                foreach ($jadwal_id as $jadwalKey => $jadwalValue) 
+               $hitung =  $this->calculateSaw($request);
+               dd($hitung);
+            }else
+            {
+                foreach ($request->balita_id as $key => $value) 
                 {
-                    $umur = $request->umur[$value][$jadwalValue];
-                    $tb = $request->tb[$value][$jadwalValue];
-                    $bidan_id = $request->bidan_id;
-                    $bb = $request->bb[$value][$jadwalValue];
-                    $check = DB::table('posyandu_hasil')->where('jadwal_id',$jadwalValue)->where('balita_id',$value)->first();
-                    //dd($check);
-                    if($check)
+                    foreach ($jadwal_id as $jadwalKey => $jadwalValue) 
                     {
-                        DB::table('posyandu_hasil')->where('id',$check->id)->update([
-                            'balita_id'=>$value,
-                            'bidan_id'=>$bidan_id,
-                            'jadwal_id'=>$jadwalValue,
-                            'tb'=>$tb,
-                            'bb'=>$bb,
-                            'umur'=>$umur,
-                            'updated_at'=>$createdAt
-                        ]);
-                    }else
-                    {
-                        //return $jadwalValue.' - '.$value;
-                        DB::table('posyandu_hasil')->insert([
-                            'balita_id'=>$value,
-                            'bidan_id'=>$bidan_id,
-                            'jadwal_id'=>$jadwalValue,
-                            'tb'=>$tb,
-                            'bb'=>$bb,
-                            'umur'=>$umur,
-                            'created_at'=>$createdAt
-                        ]);
+                        $umur = $request->umur[$value][$jadwalValue];
+                        $tb = $request->tb[$value][$jadwalValue];
+                        $bidan_id = $request->bidan_id;
+                        $bb = $request->bb[$value][$jadwalValue];
+                        $check = DB::table('posyandu_hasil')->where('jadwal_id',$jadwalValue)->where('balita_id',$value)->first();
+                        if($check)
+                        {
+                            DB::table('posyandu_hasil')->where('id',$check->id)->update([
+                                'balita_id'=>$value,
+                                'bidan_id'=>$bidan_id,
+                                'jadwal_id'=>$jadwalValue,
+                                'tb'=>$tb,
+                                'bb'=>$bb,
+                                'umur'=>$umur,
+                                'updated_at'=>$createdAt
+                            ]);
+                        }else
+                        { 
+                            DB::table('posyandu_hasil')->insert([
+                                'balita_id'=>$value,
+                                'bidan_id'=>$bidan_id,
+                                'jadwal_id'=>$jadwalValue,
+                                'tb'=>$tb,
+                                'bb'=>$bb,
+                                'umur'=>$umur,
+                                'created_at'=>$createdAt
+                            ]);
+                        }
                     }
                 }
+                return redirect()->back()->with('success','Berhasil menambahakan data timbangan');
             }
-            return redirect()->back()->with('success','Berhasil menambahakan data timbangan');
         }else{
             return redirect()->back()->with('error','Filter data terlebih dahulu!');
         }
     }
 
-    public function calculateSaw()
+    public function calculateSaw($request)
     {
-        //step 1
-        
+        $balita = DB::table('balita')->whereIn('id',$request->balita_id)->get();
+        $data = [];
+        foreach ($balita as $balitaKey => $balitaValue) 
+        {
+            $umur = 0;
+            $tb = 0;
+            $bb = 0;
+            $jenis_kelamin = $balitaValue->jenis_kelamin;
+            foreach ($request->jadwal_id as $jadwalKey => $jadwalValue) 
+            {
+               $umur = $request->umur[$balitaValue->id][$jadwalValue];
+               $tb = $request->tb[$balitaValue->id][$jadwalValue];
+               $bb = $request->bb[$balitaValue->id][$jadwalValue];
+               $data[$balitaValue->id][$jadwalValue] = [];
+               if($jenis_kelamin == 'L')
+               {
+                    if($tb != null && $bb != null)
+                    {
+                        //c1
+                        $ceSatu = $this->getBobot($jenis_kelamin,$umur,$tb,null,'standart_tb_umur_laki_laki','tb_char','tb/u');
+                        $ceSatu = $this->normalizeKategori($ceSatu); //30
+                        array_push($data[$balitaValue->id][$jadwalValue], $ceSatu);
+                        //c2
+                        $ceDua = $this->getBobot($jenis_kelamin,$umur,$bb,null,'standart_bb_umur_laki_laki','bb_char','bb/u');
+                        $ceDua = $this->normalizeKategori($ceDua); //40
+                        array_push($data[$balitaValue->id][$jadwalValue], $ceDua);
+                        //c3
+                        $ceTiga = $this->getBobot($jenis_kelamin,$umur,$tb,$bb,'standart_bb_tb_laki_laki','tb_bb_char','bb/tb');
+                        $ceTiga = $this->normalizeKategori($ceTiga); //30
+                        array_push($data[$balitaValue->id][$jadwalValue], $ceTiga);
+                    }
+               }else
+               {
+                    if($tb != null && $bb != null)
+                    {
+                        //c1
+                        $ceSatu = $this->getBobot($jenis_kelamin,$umur,$tb,null,'standart_tb_umur_perempuan','tb_char','tb/u');
+                        $ceSatu = $this->normalizeKategori($ceSatu); //30
+                        array_push($data[$balitaValue->id][$jadwalValue], $ceSatu);
+                        //c2
+                        $ceDua = $this->getBobot($jenis_kelamin,$umur,$bb,null,'standart_bb_umur_perempuan','bb_char','bb/u' );
+                        $ceDua = $this->normalizeKategori($ceDua); //40
+                        array_push($data[$balitaValue->id][$jadwalValue], $ceDua);
+                        //c3
+                        $ceTiga = $this->getBobot($jenis_kelamin,$umur,$tb,$bb,'standart_bb_tb_perempuan','tb_bb_char','bb/tb');
+                        $ceTiga = $this->normalizeKategori($ceTiga); //30
+                        array_push($data[$balitaValue->id][$jadwalValue], $ceTiga);
+                    }
+               }
+            }
+        }
+
+        return $data;
+    }
+
+    public function getBobot($jenis_kelamin,$umur,$val,$val2,$table,$column,$type)
+    {
+        $result = [];
+        if($type != 'bb/tb')
+        {
+            $data = DB::table($table)->where('umur',$umur)->where('value','<=',$val)->select($column)->get();
+            if(!$data->isEmpty())
+            {
+                foreach ($data as $key => $value) 
+                {
+                   array_push($result, $value->$column);
+                }
+            }
+        }else
+        {
+            $data = DB::table($table)->where('tb','>=',$val)->select($column,'bb')->get();
+            if(!$data->isEmpty())
+            {
+                foreach ($data as $key => $value) 
+                {
+                   $bb = round($value->bb);
+                   if($bb <= $val2)
+                   {
+                        array_push($result, $value->$column);
+                   }
+                }
+            }
+        }
+        $result = array_unique($result);
+        $arr  = ['result'=>$result,'type'=>$type,'val'=>$val,'umur'=>$umur]; 
+        return $arr;
+    }
+
+    public function normalizeKategori($arr)
+    {
+        $imp = $arr['result'];
+        if(count($arr['result']) > 1)
+        {
+            // if (count($arr['result']) > 2) 
+            // {
+            //     $imp = end($arr['result']);
+            // }else
+            // {
+                $imp = implode('|', $arr['result']);
+            //}       
+        }
+
+        $data = DB::table('kategori_status_gizi')->where('type',$arr['type'])->where('z_score',$imp)->first();
+        $result = [];
+        $result = ['arr'=>$arr,'imp'=>$imp];
+        //$bobot = 0;
+        if($data)
+        {
+            $result = ['bobot'=>$data->bobot];
+            //$bobot = $data->bobot;
+        }
+        return $result;
+       // return $bobot;
     }
 }

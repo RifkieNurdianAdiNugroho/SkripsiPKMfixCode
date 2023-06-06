@@ -72,11 +72,11 @@
                     @csrf
                     <div class="card-title">
                         <div class="d-flex align-items-center position-relative my-1">
-                            <button class="btn btn-success" name="save" type="submit" onclick="return confirm('Apakah yakin untuk menyimpan data?')">
+                            <button class="btn btn-success" name="save" value="0" type="submit" onclick="return confirm('Apakah yakin untuk menyimpan data?')">
                                 <i class="fa fa-save"></i>
                             </button>
                             &nbsp;
-                            <button class="btn btn-warning" name="hitung" type="submit" onclick="return confirm('Apakah yakin untuk menghitung data?')">
+                            <button class="btn btn-warning" name="hitung" value="1" type="submit" onclick="return confirm('Apakah yakin untuk menghitung data?')">
                                 <i class="fa fa-calculator"></i>
                             </button>
                         </div>
@@ -129,13 +129,13 @@
                                     </td>
                                    
                                     <td colspan="2">
-                                    <input type="number" name="tb[{{$balitaItem['balita_id']}}][{{$data['jadwal'][$bulanKeyOne]['jadwal_id']}}]" 
+                                    <input type="number" step="0.01" name="tb[{{$balitaItem['balita_id']}}][{{$data['jadwal'][$bulanKeyOne]['jadwal_id']}}]" 
  
                                     value="{{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['tb']}}"
                                         class="form-control form-control-solid tb">
                                     </td>
                                     <td colspan="2">
-                                        <input type="number" name="bb[{{$balitaItem['balita_id']}}][{{$data['jadwal'][$bulanKeyOne]['jadwal_id']}}]" 
+                                        <input type="number" step="0.01" name="bb[{{$balitaItem['balita_id']}}][{{$data['jadwal'][$bulanKeyOne]['jadwal_id']}}]" 
                                         value="{{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['bb']}}"
                                         class="form-control form-control-solid bb">
                                     </td>
