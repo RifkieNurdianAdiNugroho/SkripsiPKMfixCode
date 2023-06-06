@@ -50,7 +50,7 @@
                             @endif
                              <select class="form-control form-control-solid" name="pos_id">
                                 <option value="" selected disabled>
-                                    Pilih Pos
+                                    Pilih Posyandu
                                 </option>
                                 @foreach($posyandu as $posyanduKey => $posyanduItem)
                                 <option value="{{$posyanduItem->id}}" 
