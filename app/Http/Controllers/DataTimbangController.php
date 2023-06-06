@@ -130,7 +130,7 @@ class DataTimbangController extends Controller
                     $tb = $request->tb[$value][$jadwalValue];
                     $bidan_id = $request->bidan_id;
                     $bb = $request->bb[$value][$jadwalValue];
-                    $check = DB::table('posyandu_hasil')->where('jadwal_id',$jadwalValue)->where('balita_id',$value)->first();
+                    $check = DB::table('posyandu_hal')->where('jadwal_id',$jadwalValue)->where('balita_id',$value)->first();
                     //dd($check);
                     if($check)
                     {
