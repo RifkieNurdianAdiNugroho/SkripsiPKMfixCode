@@ -115,6 +115,19 @@
 								  </div>
 
 								  <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
+									<a  href="{{url('data/jadwal/timbang')}}">
+									<span class="menu-link">
+										<span class="menu-icon">
+											<span class="svg-icon svg-icon-2">
+												<i class="fa fa-balance-scale"></i>
+											</span>
+										</span>
+											<span class="menu-title">Data Timbang</span>
+										</span>
+									 </a>
+								  </div>
+								  
+								  <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
 									<a  href="{{url('data/hasil')}}">
 									<span class="menu-link">
 										<span class="menu-icon">
