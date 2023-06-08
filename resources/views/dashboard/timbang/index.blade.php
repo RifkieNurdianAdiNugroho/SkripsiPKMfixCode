@@ -94,8 +94,9 @@
                                 @foreach($data['bulan'] as $bulanKey => $bulanItem)
                                 <th colspan="6" style="text-align: center;">{{$bulanItem}}</th>
                                 @endforeach
+                                 <th colspan="2" rowspan="2" style="padding-top: 6%">Status Gizi</th>
                                 @endif
-                                <th colspan="2" rowspan="2" style="padding-top: 6%">Status Gizi</th>
+                               
                             </tr>
                             
                             <tr>
@@ -139,10 +140,10 @@
                                         value="{{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['bb']}}"
                                         class="form-control form-control-solid bb">
                                     </td>
-                                    @endforeach
                                     <td colspan="2">
-                                        {{$balitaItem['status_gizi']}}
+                                        {{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['status_gizi']}}
                                     </td>
+                                    @endforeach
                                 </tr>
                                 @endforeach
                                 @endif
