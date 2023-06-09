@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
+use Auth;
 class BidanController extends Controller
 {
 
@@ -108,6 +109,10 @@ class BidanController extends Controller
             'no_tlp'=>$request->no_tlp,
             'updated_at'=>$createdAt
         ]);
+        if(Auth::user()->role == 'bidan')
+        {
+            return redirect()->back()->with('success','Berhasil mengubah data Bidan');
+        }
         return redirect('user/bidan')->with('success','Berhasil mengubah data Bidan');
     }
 
