@@ -71,15 +71,19 @@
                     <form action="{{url('data/jadwal/timbang/store')}}" method="POST">
                     @csrf
                     <div class="card-title">
+                        @if(count($data) > 0)
                         <div class="d-flex align-items-center position-relative my-1">
                             <button class="btn btn-success" name="save" value="0" type="submit" onclick="return confirm('Apakah yakin untuk menyimpan data?')">
-                                <i class="fa fa-save"></i>
+                                Simpan Data Timbang &nbsp;<i class="fa fa-save"></i>
                             </button>
+                            @if($role == 'ahli_gizi')
                             &nbsp;
                             <button class="btn btn-warning" name="hitung" value="1" type="submit" onclick="return confirm('Apakah yakin untuk menghitung data?')">
-                                <i class="fa fa-calculator"></i>
+                                Hitung Data Timbang &nbsp;<i class="fa fa-calculator"></i>
                             </button>
+                            @endif
                         </div>
+                        @endif
                     </div>
                 </div>
                 <div class="card-body py-4">
@@ -87,14 +91,14 @@
                         @if(count($data) > 0)
                         <table class="table align-middle table-row-dashed fs-6 gy-5">
                             <tr>
-                                <th colspan="2" rowspan="2" style="padding-top: 6%">Nama Posyandu</th>
+                                <th colspan="2" rowspan="2" style="padding-top: 6%">Nama Pos & Bidan</th>
                                 <th colspan="2" rowspan="2" style="padding-top: 6%">Nama Anak</th>
                                 <th colspan="2" rowspan="2" style="padding-top: 6%">Nama Ortu</th>
                                 @if(isset($data['bulan']))
                                 @foreach($data['bulan'] as $bulanKey => $bulanItem)
                                 <th colspan="6" style="text-align: center;">{{$bulanItem}}</th>
                                 @endforeach
-                                 <th colspan="2" rowspan="2" style="padding-top: 6%">Status Gizi</th>
+                                
                                 @endif
                                
                             </tr>
@@ -105,7 +109,7 @@
                                     <th colspan="2" style="text-align: center;padding-bottom: 2%;">Umur</th>
                                     <th colspan="2" style="text-align: center;padding-bottom: 2%;">TB</th>
                                     <th colspan="2" style="text-align: center;padding-bottom: 2%;">BB</th>
-                                   
+                                    <th colspan="2" style="text-align: center;padding-bottom: 2%;">Status Gizi</th>
                                     <input type="hidden" name="pos_id" 
                                            value="{{$data['jadwal'][$bulanKey]['jadwal_id']}}">
                                     <input type="hidden" name="bidan_id" 
@@ -118,7 +122,10 @@
                                 @if(isset($data['balita']))
                                 @foreach($data['balita'] as $balitaKey => $balitaItem)
                                 <tr>    
-                                    <td colspan="2">{{$balitaItem['pos']}}</td>
+                                    <td colspan="2">
+                                        {{$balitaItem['pos']}}<br>
+                                        (Bidan : {{$balitaItem['bidan']}})
+                                    </td>
                                     <td colspan="2">{{$balitaItem['nama']}}</td>
                                     <td colspan="2">{{$balitaItem['ortu']}}</td>
                                     <input type="hidden" name="balita_id[]" value="{{$balitaItem['balita_id']}}">
