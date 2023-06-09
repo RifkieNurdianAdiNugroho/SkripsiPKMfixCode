@@ -109,9 +109,15 @@
                             </div>
                             <div class="separator mb-6"></div>
                             <div class="d-flex justify-content-end">
+                                 @if(Auth::user()->role == 'bidan')
+                                <a href="{{ url('home') }}" class="btn btn-danger me-3">
+                                    <span class="indicator-label">Batal</span>
+                                </a>
+                                @else
                                 <a href="{{ url('/user/bidan') }}" class="btn btn-danger me-3">
                                     <span class="indicator-label">Batal</span>
                                 </a>
+                                @endif
                                 <button type="reset" data-kt-contacts-type="cancel" class="btn btn-light me-3">Bersihkan</button>
                                 <button type="submit" data-kt-contacts-type="submit" class="btn btn-primary" id="btn_sbmt">
                                     <span class="indicator-label">Simpan</span>
