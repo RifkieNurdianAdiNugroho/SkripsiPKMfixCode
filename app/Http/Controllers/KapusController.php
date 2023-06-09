@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
+use Auth;
 class KapusController extends Controller
 {
 
@@ -106,6 +107,10 @@ class KapusController extends Controller
             'no_tlp'=>$request->no_tlp,
             'updated_at'=>$createdAt
         ]);
+        if(Auth::user()->role == 'kapus')
+        {
+            return redirect()->back()->with('success','Berhasil mengubah data Kepala Puskesmas');
+        }
         return redirect('user/kapus')->with('success','Berhasil mengubah data Kepala Puskesmas');
     }
 
