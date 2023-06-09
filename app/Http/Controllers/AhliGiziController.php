@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
+use Auth;
 class AhliGiziController extends Controller
 {
 
@@ -106,6 +107,10 @@ class AhliGiziController extends Controller
             'no_tlp'=>$request->no_tlp,
             'updated_at'=>$createdAt
         ]);
+        if(Auth::user()->role == 'ahli_gizi')
+        {
+            return redirect()->back()->with('success','Berhasil mengubah data Ahli Gizi');
+        }
         return redirect('user/ahli_gizi')->with('success','Berhasil mengubah data Ahli Gizi');
     }
 
