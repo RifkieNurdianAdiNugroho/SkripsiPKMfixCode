@@ -24,7 +24,12 @@
 									 </a>
 								  </div>
 								
-								  @php $roleLoggedIn = Auth::user()->role; @endphp
+								  @php $roleLoggedIn = Auth::user()->role; 
+								  	   $userIdLoggedIn = Auth::user()->id; 
+								       $modelUser = new \App\Models\User();
+								       $getIdItem = $modelUser->getItemIdByUserId($roleLoggedIn,$userIdLoggedIn);
+								  @endphp
+
 								  @include('layouts.dashboard.'.$roleLoggedIn.'')
 
 									<div class="menu-item">
@@ -34,7 +39,7 @@
 									</div>
 
 									<div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
-										<a  href="{{url('profile')}}">
+										<a  href="{{ url('user/'.$roleLoggedIn.'/edit/' . $getIdItem) }}">
 											<span class="menu-link">
 											<span class="menu-icon">
 												<!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->

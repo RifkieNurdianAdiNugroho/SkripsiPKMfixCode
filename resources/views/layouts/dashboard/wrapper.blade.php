@@ -88,13 +88,12 @@
 											<!--begin::Menu separator-->
 											<div class="separator my-2"></div>
 											<div class="menu-item px-5">
-												<a href="{{url('profile_user')}}"
-												 class="menu-link px-5">Profile</a>
+												
 												<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf </form>
 												<a href="#"
 												 onclick="event.preventDefault();
                             						document.getElementById('logout-form').submit();"
-												 class="menu-link px-5">Sign Out</a>
+												 class="menu-link px-5">Keluar</a>
 											</div>
 											<!--end::Menu item-->
 											<!--begin::Menu separator-->
