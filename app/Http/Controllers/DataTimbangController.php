@@ -90,6 +90,7 @@ class DataTimbangController extends Controller
                     $tglLahir =  Carbon::parse($balitaValue->tgl_lahir);
                     $umur = Carbon::parse($tglLahir)->diffInMonths($jadwalDate);
                     $data['balita'][$balitaKey]['pos']= $jadwalValue->posyandu_name;
+                    $data['balita'][$balitaKey]['bidan']= $jadwalValue->bidan_name;
                     $data['balita'][$balitaKey]['balita_id'] = $balitaValue->id;
                     $data['balita'][$balitaKey]['nama']= $balitaValue->nama;
                     $data['balita'][$balitaKey]['ortu']= $balitaValue->nama_ortu;
