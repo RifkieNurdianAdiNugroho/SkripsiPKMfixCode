@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
 use Auth;
+use Session;
+use App\Exports\DataTimbangExport;
+use Maatwebsite\Excel\Facades\Excel;
 class DataTimbangController extends Controller
 {
 
@@ -94,6 +97,7 @@ class DataTimbangController extends Controller
                     $data['balita'][$balitaKey]['balita_id'] = $balitaValue->id;
                     $data['balita'][$balitaKey]['nama']= $balitaValue->nama;
                     $data['balita'][$balitaKey]['ortu']= $balitaValue->nama_ortu;
+                    $data['balita'][$balitaKey]['jenis_kelamin']= $balitaValue->jenis_kelamin;
                     $data['hasil'][$jadwalValue->id][$balitaKey]['status_gizi'] = 'Belum Dihitung';
                     $data['hasil'][$jadwalValue->id][$balitaKey]['umur'] = $umur;
                     $data['hasil'][$jadwalValue->id][$balitaKey]['tb'] = '';
@@ -116,7 +120,13 @@ class DataTimbangController extends Controller
         }
         //dd($data);
         $bidan = DB::table('bidan')->get();
+        Session::put('dataTimbang',$data);
         return view('dashboard.timbang.index',compact('data','now','posyandu','request','bidan','role'));
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new DataTimbangExport, 'data_timbang.xlsx');
     }
 
     public function store(Request $request)
