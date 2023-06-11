@@ -127,7 +127,7 @@
 									 </a>
 								  </div>
 								  
-								  <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
+								 <!--  <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
 									<a  href="{{url('data/hasil')}}">
 									<span class="menu-link">
 										<span class="menu-icon">
@@ -135,18 +135,18 @@
 												<i class="fa fa-file"></i>
 											</span>
 										</span>
-											<span class="menu-title">Hasil</span>
+											<span class="menu-title">Laporan</span>
 										</span>
 									 </a>
-								  </div>
+								  </div> -->
 
-								  <div class="menu-item">
+								 <!--  <div class="menu-item">
 									<div class="menu-content pt-8 pb-0">
 										<span class="menu-section text-muted text-uppercase fs-8 ls-1">Laporan</span>
 									</div>
-								 </div>
+								 </div> -->
 
-								 <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
+						<!-- 		 <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
 									<a  href="{{url('laporan/user')}}">
 									<span class="menu-link">
 										<span class="menu-icon">
@@ -170,4 +170,4 @@
 											<span class="menu-title">Data</span>
 										</span>
 									 </a>
-								  </div>
+								  </div> -->
