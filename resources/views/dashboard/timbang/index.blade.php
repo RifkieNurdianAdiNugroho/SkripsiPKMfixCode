@@ -73,14 +73,23 @@
                     <div class="card-title">
                         @if(count($data) > 0)
                         <div class="d-flex align-items-center position-relative my-1">
-                            <button class="btn btn-success" name="save" value="0" type="submit" onclick="return confirm('Apakah yakin untuk menyimpan data?')">
+                            @if($role == 'ahli_gizi' || $role == 'bidan')
+                            <button class="btn btn-primary" name="save" value="0" type="submit" onclick="return confirm('Apakah yakin untuk menyimpan data?')">
                                 Simpan Data Timbang &nbsp;<i class="fa fa-save"></i>
                             </button>
+                            @endif
                             @if($role == 'ahli_gizi')
-                            &nbsp;
+                            &nbsp;&nbsp;
                             <button class="btn btn-warning" name="hitung" value="1" type="submit" onclick="return confirm('Apakah yakin untuk menghitung data?')">
                                 Hitung Data Timbang &nbsp;<i class="fa fa-calculator"></i>
                             </button>
+                            
+                            @endif
+                            @if($role == 'ahli_gizi' || $role == 'kapus')
+                            &nbsp;&nbsp;
+                            <a class="btn btn-success" href="{{url('data/jadwal/timbang/export')}}">
+                                Export Data Timbang &nbsp;<i class="fa fa-file-excel"></i>
+                            </a>
                             @endif
                         </div>
                         @endif
@@ -126,7 +135,10 @@
                                         {{$balitaItem['pos']}}<br>
                                         (Bidan : {{$balitaItem['bidan']}})
                                     </td>
-                                    <td colspan="2">{{$balitaItem['nama']}}</td>
+                                    <td colspan="2">
+                                        {{$balitaItem['nama']}}<br>
+                                        ({{$balitaItem['jenis_kelamin']}})
+                                    </td>
                                     <td colspan="2">{{$balitaItem['ortu']}}</td>
                                     <input type="hidden" name="balita_id[]" value="{{$balitaItem['balita_id']}}">
 
