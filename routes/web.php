@@ -90,6 +90,7 @@ Route::prefix('data')->group(function () {
 
         Route::prefix('timbang')->group(function () {
             Route::get('/', [DataTimbangController::class, 'index']);
+            Route::get('/export', [DataTimbangController::class, 'exportExcel']);
             Route::post('/store', [DataTimbangController::class, 'store']);
         });
     });
