@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
+use Auth;
 class KaderController extends Controller
 {
 
@@ -30,8 +31,31 @@ class KaderController extends Controller
             $kader->select('kd.*','pos.nama_pos');
             $data = $kader->get();
         }
-        $posyandu = DB::table('posyandu')->get();
-        return view('dashboard.kader.index',compact('data','request','posyandu'));
+        $bidan = DB::table('bidan')->get();
+        $posyandu = [];
+        if(Auth::user()->role == 'bidan')
+        {
+            $userId = Auth::user()->id;
+            $bidanAuth = DB::table('bidan')->where('user_id',$userId)->first();
+            $posyandu = DB::table('posyandu as pd')
+                    ->join('posyandu_bidan as pb','pb.posyandu_id','=','pd.id')
+                    ->where('pb.bidan_id',$bidanAuth->id)
+                    ->select('pd.*')
+                    ->groupBy('pd.id')
+                    ->get();
+        }else
+        {
+            if($request->bidan_id != null)
+            {
+                $posyandu = DB::table('posyandu as pd')
+                            ->join('posyandu_bidan as pb','pb.posyandu_id','=','pd.id')
+                            ->where('pb.bidan_id',$request->bidan_id)
+                            ->select('pd.id','pd.nama_pos')
+                            ->groupBy('pb.posyandu_id')
+                            ->get();
+            }
+        }
+        return view('dashboard.kader.index',compact('data','request','bidan','posyandu'));
     }
 
     public function create()
