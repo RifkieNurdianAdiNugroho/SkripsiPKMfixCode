@@ -59,6 +59,19 @@
                                     value="" placeholder="Cth : Jalan Raya Lembu Suro No.1, Krajan, Kejayan, Kec. Kejayan, Pasuruan, Jawa Timur 67172" />
                             </div>
 
+                             <div class="fv-row mb-7">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Bidan</span>
+                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
+                                        title="Alamat Pos"></i>
+                                </label>
+                                <br>
+                                <p>Silahkan checklist bidan yang ingin ditempatkan di pos ini</p>
+                                @foreach($bidan as $bidanKey => $bidanItem)
+                                    <input type="checkbox" id="bidan_nya{{$bidanItem->id}}" name="bidan_id[]" value="{{$bidanItem->id}}"> <label for="bidan_nya{{$bidanItem->id}}" style="cursor: pointer;">{{$bidanItem->nama}}</label> &nbsp;&nbsp;
+                                @endforeach
+                            </div>
+
                             <div class="separator mb-6"></div>
                             <div class="d-flex justify-content-end">
                                 <a href="{{ url('/data/posyandu') }}" class="btn btn-danger me-3">
