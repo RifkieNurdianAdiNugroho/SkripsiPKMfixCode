@@ -29,7 +29,16 @@ class BalitaController extends Controller
         }else
         {   
             $bidan = DB::table('bidan')->get();
-            $posyandu = DB::table('posyandu')->get();
+            $posyandu = [];
+            if($request->bidan_id != null)
+            {
+                $posyandu = DB::table('posyandu as pd')
+                            ->join('posyandu_bidan as pb','pb.posyandu_id','=','pd.id')
+                            ->where('pb.bidan_id',$request->bidan_id)
+                            ->select('pd.id','pd.nama_pos')
+                            ->groupBy('pb.posyandu_id')
+                            ->get();
+            }
         }
         $data = [];
         $balitaArr = [];
