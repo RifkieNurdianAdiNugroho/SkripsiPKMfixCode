@@ -58,7 +58,24 @@
                                 <input type="text" required class="form-control form-control-solid" name="alamat"
                                     value="{{$data->alamat}}" placeholder="Cth : Jalan Raya Lembu Suro No.1, Krajan, Kejayan, Kec. Kejayan, Pasuruan, Jawa Timur 67172" />
                             </div>
-
+                            <div class="fv-row mb-7">
+                                 <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Posyandu</span>
+                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
+                                        title="Posyandu"></i>
+                                </label>
+                                <select class="form-control form-control-solid" name="posyandu_id">
+                                    <option value="" selected disabled>
+                                        Pilih Pos
+                                    </option>
+                                    @foreach($pos as $posKey => $posItem)
+                                    <option value="{{$posItem->id}}" 
+                                            {{$data->posyandu_id == $posItem->id ? 'selected':''}}>
+                                        {{$posItem->nama_pos}}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="separator mb-6"></div>
                             <div class="d-flex justify-content-end">
                                 <a href="{{ url('/data/kader') }}" class="btn btn-danger me-3">
