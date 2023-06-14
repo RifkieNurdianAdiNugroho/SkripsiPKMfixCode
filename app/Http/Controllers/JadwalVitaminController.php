@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
+use Auth;
 class JadwalVitaminController extends Controller
 {
 
@@ -12,16 +13,59 @@ class JadwalVitaminController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = DB::table('posyandu_jadwal as pj')
-                ->join('posyandu as pos','pos.id','=','pj.posyandu_id')
-                ->join('bidan as bd','bd.id','=','pj.bidan_id')
-                ->where('pj.jenis','vitamin')
-                ->select('pj.*','pos.nama_pos as posyandu_name','bd.nama as bidan_name')
-                ->orderBy('pj.tanggal','DESC')
-                ->get();
-        return view('dashboard.posyandu.jadwal.vitamin.index',compact('data'));
+        $data = [];
+        if(count($request->all()) > 0)
+        {
+            $get = DB::table('posyandu_jadwal as pj');
+            $get->join('posyandu as pos','pos.id','=','pj.posyandu_id');
+            $get->join('bidan as bd','bd.id','=','pj.bidan_id');
+            $get->where('pj.jenis','vitamin');
+            if($request->bidan_id != null)
+            {   
+                $get->where('pj.bidan_id',$request->bidan_id);
+            }
+            if($request->pos_id != null)
+            {   
+                $get->where('pj.posyandu_id',$request->pos_id);
+            }
+            if($request->tanggal != null)
+            {
+                $start = explode('-', $request->tanggal);
+                $get->whereMonth('pj.tanggal','=',$start[1]);
+                $get->whereYear('pj.tanggal','=',$start[0]);
+            }
+            $get->select('pj.*','pos.nama_pos as posyandu_name','bd.nama as bidan_name');
+            $get->orderBy('pj.tanggal','DESC');
+            $data = $get->get();
+        }
+        if(Auth::user()->role == 'bidan')
+        {
+            $userId = Auth::user()->id;
+            $bidanAuth = DB::table('bidan')->where('user_id',$userId)->first();
+            $posyandu = DB::table('posyandu as pd')
+                    ->join('posyandu_bidan as pb','pb.posyandu_id','=','pd.id')
+                    ->where('pb.bidan_id',$bidanAuth->id)
+                    ->select('pd.*')
+                    ->groupBy('pd.id')
+                    ->get();
+            $bidan = DB::table('bidan')->where('user_id',$userId)->get();
+        }else
+        {
+            $bidan = DB::table('bidan')->get();
+            $posyandu = [];
+            if($request->bidan_id != null)
+            {
+                $posyandu = DB::table('posyandu as pd')
+                            ->join('posyandu_bidan as pb','pb.posyandu_id','=','pd.id')
+                            ->where('pb.bidan_id',$request->bidan_id)
+                            ->select('pd.id','pd.nama_pos')
+                            ->groupBy('pb.posyandu_id')
+                            ->get();
+            }
+        }
+        return view('dashboard.posyandu.jadwal.vitamin.index',compact('data','request','bidan','posyandu'));
     }
 
      public function create()
