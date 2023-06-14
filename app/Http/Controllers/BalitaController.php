@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
+use Auth;
 class BalitaController extends Controller
 {
 
@@ -12,11 +13,71 @@ class BalitaController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = DB::table('balita as bd')
-                ->get();
-        return view('dashboard.balita.index',compact('data'));
+        if(Auth::user()->role == 'bidan')
+        {
+            $userId = Auth::user()->id;
+            $bidanAuth = DB::table('bidan')->where('user_id',$userId)->first();
+            $posyandu = DB::table('posyandu as pd')
+                    ->join('posyandu_bidan as pb','pb.posyandu_id','=','pd.id')
+                    ->where('pb.bidan_id',$bidanAuth->id)
+                    ->select('pd.*')
+                    ->groupBy('pd.id')
+                    ->get();
+            $bidan = DB::table('bidan')->where('user_id',$userId)->get();
+        }else
+        {   
+            $bidan = DB::table('bidan')->get();
+            $posyandu = DB::table('posyandu')->get();
+        }
+        $data = [];
+        $balitaArr = [];
+        if(count($request->all()) > 0)
+        {
+            if($request->pos_id != null)
+            {
+                $hasilPos = DB::table('posyandu_hasil as ph')
+                            ->join('posyandu_jadwal as pj','ph.jadwal_id','=','pj.id')
+                            ->where('pj.posyandu_id',$request->pos_id)
+                            ->select('ph.balita_id')
+                            ->groupBy('ph.balita_id')
+                            ->get();
+                foreach ($hasilPos as $key => $value) 
+                {
+                    array_push($balitaArr, $value->balita_id);
+                }
+            }
+            if($request->bidan_id != null)
+            {
+                $hasilPos = DB::table('posyandu_hasil as ph')
+                            ->join('posyandu_jadwal as pj','ph.jadwal_id','=','pj.id')
+                            ->where('ph.bidan_id',$request->bidan_id)
+                            ->select('ph.balita_id')
+                            ->groupBy('ph.balita_id')
+                            ->get();
+                foreach ($hasilPos as $key => $value) 
+                {
+                    array_push($balitaArr, $value->balita_id);
+                }
+            }
+
+            $balitaArr = array_unique($balitaArr);
+            //dd($balitaArr);
+            $balita = DB::table('balita as bta');
+            if($request->balita != null)
+            {
+                $balita->where('bta.nama', 'like', '%' . $request->balita . '%');
+            }
+            if($request->ortu != null)
+            {
+                $balita->where('bta.nama_ortu', 'like', '%' . $request->ortu . '%');
+            }
+                $balita->whereIn('id',$balitaArr);
+            $data = $balita->get();
+            //dd($data);
+        }
+        return view('dashboard.balita.index',compact('data','bidan','posyandu','request'));
     }
 
     public function create()
