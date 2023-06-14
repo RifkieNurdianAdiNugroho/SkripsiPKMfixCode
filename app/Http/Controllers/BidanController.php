@@ -22,6 +22,17 @@ class BidanController extends Controller
         return view('dashboard.bidan.index',compact('data'));
     }
 
+    public function posyandu($id)
+    {
+        $posyandu = DB::table('posyandu as pd')
+                        ->join('posyandu_bidan as pb','pb.posyandu_id','=','pd.id')
+                        ->where('pb.bidan_id',$id)
+                        ->select('pd.id','pd.nama_pos')
+                        ->groupBy('pb.posyandu_id')
+                        ->get();
+        return response()->json(['data'=>$posyandu]);
+    }
+
     public function create()
     {
         return view('dashboard.bidan.add');
