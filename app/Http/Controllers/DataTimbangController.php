@@ -43,11 +43,13 @@ class DataTimbangController extends Controller
         {
             $start = explode('-', $request->start_month);
             $getJadwal->whereMonth('pj.tanggal','=',$start[1]);
+            $getJadwal->whereYear('pj.tanggal','=',$start[0]);
         }
         if($request->start_month == null && $request->end_month != null)
         {
             $end = explode('-', $request->end_month);
             $getJadwal->whereMonth('pj.tanggal','=',$end[1]);
+            $getJadwal->whereYear('pj.tanggal','=',$end[0]);
         }
         if($request->start_month != null && $request->end_month != null)
         {
