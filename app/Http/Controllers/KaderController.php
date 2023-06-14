@@ -12,16 +12,32 @@ class KaderController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = DB::table('kader as bd')
-                ->get();
-        return view('dashboard.kader.index',compact('data'));
+        $data = [];
+        if(count($request->all()) > 0)
+        {
+            $kader = DB::table('kader as kd');
+            $kader->join('posyandu as pos','pos.id','=','kd.posyandu_id');
+            if($request->pos_id != null)
+            {
+                $kader->where('kd.posyandu_id',$request->pos_id);
+            }
+            if($request->kader != null)
+            {
+                $kader->where('kd.nama', 'like', '%' . $request->kader . '%');
+            }
+            $kader->select('kd.*','pos.nama_pos');
+            $data = $kader->get();
+        }
+        $posyandu = DB::table('posyandu')->get();
+        return view('dashboard.kader.index',compact('data','request','posyandu'));
     }
 
     public function create()
     {
-        return view('dashboard.kader.add');
+        $pos = DB::table('posyandu')->get();
+        return view('dashboard.kader.add',compact('pos'));
     }
 
     public function store(Request $request)
@@ -30,6 +46,7 @@ class KaderController extends Controller
         DB::table('kader')->insert([
             'nama'=>$request->nama,
             'no_tlp'=>$request->no_tlp,
+            'posyandu_id'=>$request->posyandu_id,
             'alamat'=>$request->alamat,
             'created_at'=>$createdAt
         ]);
@@ -45,7 +62,8 @@ class KaderController extends Controller
         {
             return redirect('data/kader')->with('error','Tidak dapat menemukan data Kader');
         }
-        return view('dashboard.kader.edit',compact('data'));
+        $pos = DB::table('posyandu')->get();
+        return view('dashboard.kader.edit',compact('data','pos'));
     }
 
     public function update(Request $request,$id)
@@ -57,6 +75,7 @@ class KaderController extends Controller
                 'nama'=>$request->nama,
                 'no_tlp'=>$request->no_tlp,
                 'alamat'=>$request->alamat,
+                'posyandu_id'=>$request->posyandu_id,
                 'updated_at'=>$createdAt,
             ]);
 
