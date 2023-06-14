@@ -58,7 +58,21 @@
                                 <input type="text" required class="form-control form-control-solid" name="alamat"
                                     value="{{$data->alamat}}" placeholder="Cth : Jalan Raya Lembu Suro No.1, Krajan, Kejayan, Kec. Kejayan, Pasuruan, Jawa Timur 67172" />
                             </div>
-                            
+                            <div class="fv-row mb-7">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Bidan</span>
+                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
+                                        title="Alamat Pos"></i>
+                                </label>
+                                <br>
+                                <p>Silahkan checklist bidan yang ingin ditempatkan di pos ini</p>
+                                @foreach($bidanYes as $bidanYesKey => $bidanYesItem)
+                                    <input checked type="checkbox" id="bidan_nya{{$bidanYesItem->id}}" name="bidan_id[]" value="{{$bidanYesItem->id}}"> <label for="bidan_nya{{$bidanYesItem->id}}" style="cursor: pointer;">{{$bidanYesItem->nama}}</label> &nbsp;&nbsp;
+                                @endforeach
+                                @foreach($bidanNot as $bidanNotKey => $bidanNotItem)
+                                    <input type="checkbox" id="bidan_nya{{$bidanNotItem->id}}" name="bidan_id[]" value="{{$bidanNotItem->id}}"> <label for="bidan_nya{{$bidanNotItem->id}}" style="cursor: pointer;">{{$bidanNotItem->nama}}</label> &nbsp;&nbsp;
+                                @endforeach
+                            </div>
                             <div class="separator mb-6"></div>
                             <div class="d-flex justify-content-end">
                                 <a href="{{ url('/data/posyandu') }}" class="btn btn-danger me-3">
