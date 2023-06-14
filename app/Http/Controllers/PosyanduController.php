@@ -15,23 +15,55 @@ class PosyanduController extends Controller
     public function index()
     {
         $data = DB::table('posyandu')->get();
-        return view('dashboard.posyandu.index',compact('data'));
+        $bidanPos = [];
+        foreach ($data as $key => $value) 
+        {
+           $check = DB::table('posyandu_bidan')->where('posyandu_id',$value->id)->where('status',1)->get();
+           if(!$check->isEmpty())
+           {
+             $noBidan = 0;
+             foreach ($check as $checkKey => $checkValue) 
+             {
+                 $bidan = DB::table('bidan')->where('id',$checkValue->bidan_id)->first();
+                 if($bidan)
+                 {
+                    $noBidan++;
+                    $bidanPos[$key][$noBidan]['nama'] = $bidan->nama;
+                 }
+             }
+           }
+        }
+        //dd($bidanPos);
+        return view('dashboard.posyandu.index',compact('data','bidanPos'));
     }
 
-     public function create()
+    public function create()
     {
-        return view('dashboard.posyandu.add');
+        $bidan = DB::table('bidan')->get();
+        return view('dashboard.posyandu.add',compact('bidan'));
     }
 
     public function store(Request $request)
     {
+        //dd($request->all());
         $createdAt = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
-        DB::table('posyandu')->insert([
-            'desa'=>$request->desa,
-            'alamat'=>$request->alamat,
-            'nama_pos'=>$request->nama_pos,
-            'created_at'=>$createdAt
-        ]);
+        $Id = DB::table('posyandu')->insertGetId([
+                'desa'=>$request->desa,
+                'alamat'=>$request->alamat,
+                'nama_pos'=>$request->nama_pos,
+                'created_at'=>$createdAt
+            ]);
+        if($request->bidan_id)
+        {
+            foreach ($request->bidan_id as $key => $value) 
+            {
+                DB::table('posyandu_bidan')->insert([
+                    'posyandu_id'=>$Id,
+                    'bidan_id'=>$value,
+                    'created_at'=>$createdAt
+                ]);
+            }
+        }
         return redirect('data/posyandu')->with('success','Berhasil menambahakan data Pos');
     }
 
@@ -44,67 +76,16 @@ class PosyanduController extends Controller
         {
             return redirect('data/posyandu')->with('error','Tidak dapat menemukan data Pos');
         }
-        return view('dashboard.posyandu.edit',compact('data'));
-    }
-
-    public function kader($id)
-    {
-       $data = DB::table('posyandu as kp')
-                ->where('kp.id',$id)
-                ->first();
-        if(!$data)
+        $bidanChecked = [];
+        $bidanData = DB::table('posyandu_bidan')->where('posyandu_id',$id)->get();
+        foreach ($bidanData as $key => $value) 
         {
-            return redirect('data/posyandu')->with('error','Tidak dapat menemukan data Pos');
+            array_push($bidanChecked, $value->bidan_id);
         }
-        $kader = DB::table('kader')->get();
-        $kader = json_decode(json_encode($kader),true);
-        $kaderArr = [];
-        foreach ($kader as $key => $value) 
-        {
-            $check = DB::table('posyandu_kader')
-            ->where('kader_id',$value['id'])
-            ->where('hide','no')
-            ->where('posyandu_id',$id)
-            ->first();
-            if($check)
-            {
-                array_push($kaderArr, $check->kader_id);
-            }
-        }
-        return view('dashboard.posyandu.kader',compact('data','kaderArr','kader'));
-    }
-
-    public function kaderStore(Request $request)
-    {
-        $kaderSelected = $request->kader_id;
-        if(count($kaderSelected) < 0)
-        {
-            return redirect()->back()->with('error','Minimal harus memilih salah satu kader');
-        }
-        DB::table('posyandu_kader')->where('posyandu_id',$request->posyandu_id)->update(['hide'=>'yes']);
-        $createdAt = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
-        foreach ($kaderSelected as $key => $value) 
-        {
-            $data = DB::table('posyandu_kader')
-            ->where('kader_id',$value)
-            ->where('posyandu_id',$request->posyandu_id)
-            ->first();
-            if($data)
-            {
-                DB::table('posyandu_kader')
-                ->where('kader_id',$value)
-                ->where('posyandu_id',$request->posyandu_id)
-                ->update(['hide'=>'no']);
-            }else{
-                DB::table('posyandu_kader')->insert([
-                    'posyandu_id'=>$request->posyandu_id,
-                    'kader_id'=>$value,
-                    'hide'=>'no',
-                    'created_at'=>$createdAt
-                ]);
-            }
-        }
-         return redirect()->back()->with('success','Berhasil menambahkan kader');
+        $bidanYes = DB::table('bidan')->whereIn('id',$bidanChecked)->get();
+        $bidanNot = DB::table('bidan')->whereNotIn('id',$bidanChecked)->get();
+        //dd($bidanYes);
+        return view('dashboard.posyandu.edit',compact('data','bidanYes','bidanNot'));
     }
 
     public function update(Request $request,$id)
@@ -117,6 +98,25 @@ class PosyanduController extends Controller
             'nama_pos'=>$request->nama_pos,
             'updated_at'=>$createdAt
         ]);
+        DB::table('posyandu_bidan')->where('posyandu_id',$id)->update(['status'=>0]);
+        if($request->bidan_id)
+        {
+            foreach ($request->bidan_id as $key => $value) 
+            {
+                $check = DB::table('posyandu_bidan')->where('posyandu_id',$id)->where('bidan_id',$value)->first();
+                if(!$check)
+                {
+                   DB::table('posyandu_bidan')->insert([
+                        'posyandu_id'=>$id,
+                        'bidan_id'=>$value,
+                        'created_at'=>$createdAt
+                    ]);
+                }else
+                {
+                    DB::table('posyandu_bidan')->where('id',$check->id)->update(['status'=>1]);
+                }
+            }
+        }
         return redirect('data/posyandu')->with('success','Berhasil mengubah data Pos');
     }
 
