@@ -43,6 +43,7 @@
                                     class="form-control form-control-solid w-250px ps-14" placeholder="Search user" />
                             </div>
                         </div>
+                        @if(Auth::user()->role == 'ahli_gizi')
                         <div class="card-toolbar">
                             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                                 <a href="{{ url('/data/posyandu/create') }}" class="btn btn-primary">
@@ -59,15 +60,17 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
                     </div>
                     <div class="card-body py-4">
                         <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_crm_table">
                             <thead>
                                 <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                                     <th class="w-10px pe-2">No</th>
-                                    <th class="min-w-125px">Naman Pos</th>
+                                    <th class="min-w-125px">Naman</th>
                                     <th class="min-w-125px">Desa</th>
                                     <th class="min-w-125px">Alamat</th>
+                                    <th class="min-w-125px">Bidan</th>
                                     <th class="text-end min-w-100px">Actions</th>
                                 </tr>
                             </thead>
@@ -78,6 +81,19 @@
                                         <td>{{ $item->nama_pos }}</td>
                                         <td>{{ $item->desa }}</td>
                                         <td><small>{{$item->alamat}}</small></td>
+                                        <td>
+                                            @if(isset($bidanPos[$key]))
+                                            <ul>
+                                                @foreach($bidanPos[$key] as $bidanKey => $bidanItem)
+                                                <li>
+                                                    {{$bidanItem['nama']}}
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                            @else
+                                            -
+                                            @endif
+                                        </td>
                                         <td class="text-end">
                                             <a href="#" class="btn btn-light btn-active-light-primary btn-sm"
                                                 data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
@@ -104,11 +120,7 @@
                                                         class="menu-link px-3"
                                                         data-kt-users-table-filter="delete_row">Delete</a>
                                                 </div>
-                                                <div class="menu-item px-3">
-                                                    <a href="{{ url('data/posyandu/kader/' . $item->id) }}"
-                                                        class="menu-link px-3"
-                                                        data-kt-users-table-filter="edit_row">Kader</a>
-                                                </div>
+                                                
                                             </div>
                                         </td>
                                     </tr>
