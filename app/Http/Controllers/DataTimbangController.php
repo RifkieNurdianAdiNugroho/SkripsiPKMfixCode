@@ -63,17 +63,28 @@ class DataTimbangController extends Controller
                         ,'pj.jenis as jadwal_type','pd.nama_pos as posyandu_name','pj.id');
         $getJadwal->orderBy('pj.tanggal');
         $jadwal = $getJadwal->get();
-        $getBalita = DB::table('balita');
+        $getBalita = DB::table('balita as bta');
         if($request->balita != null)
         {
-            $getBalita->where('nama', 'like', '%' . $request->balita . '%');
+            $getBalita->where('bta.nama', 'like', '%' . $request->balita . '%');
         }
         if($request->ortu != null)
         {
-            $getBalita->where('nama_ortu', 'like', '%' . $request->ortu . '%');
+            $getBalita->where('bta.nama_ortu', 'like', '%' . $request->ortu . '%');
         }
         $balita = $getBalita->get();
-        $posyandu = DB::table('posyandu')->get();
+        if($role == 'ahli_gizi' || $role == 'kapus')
+        {
+            $posyandu = DB::table('posyandu')->get();
+        }else
+        {
+            $posyandu = DB::table('posyandu as pd')
+                        ->join('posyandu_bidan as pb','pb.posyandu_id','=','pd.id')
+                        ->where('pb.bidan_id',$bidan->id)
+                        ->select('pd.*')
+                        ->groupBy('pd.id')
+                        ->get();
+        }
         $now = Carbon::now('Asia/Jakarta')->format('Y-m-d');
         $data = [];
         if(count($request->all()) > 0)
