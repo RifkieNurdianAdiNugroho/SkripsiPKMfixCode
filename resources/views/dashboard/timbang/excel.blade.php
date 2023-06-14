@@ -1,7 +1,7 @@
                         <table >
                             <tr>
                                 <th colspan="2" rowspan="2" style="padding-top: 6%">Nama Pos</th>
-                                <th colspan="2" rowspan="2" style="padding-top: 6%">Nama Pos</th>
+                                <th colspan="2" rowspan="2" style="padding-top: 6%">Nama Bidan</th>
                                 <th colspan="2" rowspan="2" style="padding-top: 6%">Nama Anak</th>
                                 <th colspan="2" rowspan="2" style="padding-top: 6%">Jenis Kelamin</th>
                                 <th colspan="2" rowspan="2" style="padding-top: 6%">Nama Ortu</th>
