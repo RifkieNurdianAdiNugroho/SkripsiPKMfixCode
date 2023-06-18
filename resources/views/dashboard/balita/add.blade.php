@@ -137,6 +137,65 @@
                                 </select>
                             </div>
 
+                            <div class="fv-row mb-7">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Bidan</span>
+                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
+                                        title="Pilih Bidan"></i>
+                                </label>
+                                <select class="form-control form-control-solid" 
+                                        name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)">
+                                       
+                                        @if(Auth::user()->role == 'bidan')
+                                          @foreach($bidan as $bidanKey => $bidanItem)
+                                            <option value="{{$bidanItem->id}}">
+                                                {{$bidanItem->nama}}
+                                            </option>
+                                          @endforeach
+                                        @else
+                                             <option value="" selected disabled>
+                                                Pilih Bidan
+                                             </option>
+                                            @foreach($bidan as $bidanKey => $bidanItem)
+                                            <option value="{{$bidanItem->id}}">
+                                                {{$bidanItem->nama}}
+                                            </option>
+                                          @endforeach
+                                        @endif
+                                </select>
+                            </div>
+
+                            <div class="fv-row mb-7">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Pos</span>
+                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
+                                        title="Pilih Pos"></i>
+                                </label>
+                                
+                                  @if(Auth::user()->role == 'bidan')
+                                  <select class="form-control form-control-solid" name="pos_id" id="pos_id">
+                                    <option value="" selected disabled>
+                                            Pilih Pos
+                                    </option>
+                                    @foreach($posyandu as $posyanduKey => $posyanduItem)
+                                    <option value="{{$posyanduItem->id}}" 
+                                                >
+                                            {{$posyanduItem->nama_pos}}
+                                    </option>
+                                    @endforeach
+                                    </select>
+                                    @else
+                                    <select class="form-control form-control-solid" name="pos_id" id="pos_id">
+                                        <option value="" selected disabled>
+                                            Pilih Pos
+                                        </option>
+                                       <option value="" selected disabled>
+                                            <small>(Pos) Pilih Bidan Terlebih Dahulu</small>
+                                        </option>
+                                    </select>
+                                @endif
+                            </div>
+
 
                             <div class="separator mb-6"></div>
                             <div class="d-flex justify-content-end">
@@ -174,5 +233,40 @@
             return true;
 
         }
+
+        function getPosyandu(val) {
+        $.ajax({
+                type: 'get',
+                url: "{{url('/user/bidan/posyandu')}}"+"/"+ val,
+                dataType: 'json',
+                success: function (data) {
+                    var temp = [];
+                    $.each(data, function (key, value) {
+                        temp.push({
+                            v: value,
+                            k: key
+                        });
+                    });
+
+                    var x = document.getElementById("pos_id");
+                    $('#pos_id').empty();
+                    var opt_head = document.createElement('option');
+                    opt_head.text = 'Pilih Pos';
+                    opt_head.value = '0';
+                    opt_head.disabled = true;
+                    opt_head.selected = true;
+                    x.appendChild(opt_head);
+                    for (var i = 0; i < temp[0].v.length; i++) {
+                        var opt = document.createElement('option');
+                        opt.value = temp[0].v[i].id;
+                        opt.text = temp[0].v[i].nama_pos;
+                        x.appendChild(opt);
+                    }
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+       }
     </script>
 @endsection
