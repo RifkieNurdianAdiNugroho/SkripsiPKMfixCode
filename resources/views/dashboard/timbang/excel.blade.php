@@ -45,13 +45,21 @@
                                     <td colspan="2">
                                       {{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['umur']}}
                                     </td>
-                                   
-                                    <td colspan="2">
+                                    @if($data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['umur'] >= 60)
+                                    <td colspan="2" style="background-color: red;">
                                     {{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['tb']}}
                                     </td>
-                                    <td colspan="2">
+                                    <td colspan="2" style="background-color: red;">
                                       {{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['bb']}}
                                     </td>
+                                    @else
+                                     <td colspan="2" style="background-color: ;">
+                                    {{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['tb']}}
+                                    </td>
+                                    <td colspan="2" style="background-color: ;">
+                                      {{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['bb']}}
+                                    </td>
+                                    @endif
                                     <td colspan="2">
                                         {{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['status_gizi']}}
                                     </td>
