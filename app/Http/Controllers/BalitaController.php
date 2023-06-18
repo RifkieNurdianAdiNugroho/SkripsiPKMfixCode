@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
 use Auth;
+use Session;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DataBalitaExport;
 class BalitaController extends Controller
 {
 
@@ -69,11 +72,23 @@ class BalitaController extends Controller
             {
                 $balita->where('bta.nama_ortu', 'like', '%' . $request->ortu . '%');
             }
-                $balita->whereIn('id',$balitaArr);
+            if($request->jenis_kelamin != null)
+            {
+                $balita->where('bta.jenis_kelamin',$request->jenis_kelamin);
+            }
+            $balita->whereIn('id',$balitaArr);
             $data = $balita->get();
-            //dd($data);
+            Session::put('dataBalita',$data);
+        }else
+        {
+            Session::forget('dataBalita');
         }
         return view('dashboard.balita.index',compact('data','bidan','posyandu','request'));
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new DataBalitaExport, 'data_balita.xlsx');
     }
 
     public function create()
