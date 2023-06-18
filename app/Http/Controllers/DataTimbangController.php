@@ -98,6 +98,10 @@ class DataTimbangController extends Controller
         {
             $getBalita->where('bta.nama_ortu', 'like', '%' . $request->ortu . '%');
         }
+        if($request->jenis_kelamin != null)
+        {
+            $getBalita->where('bta.jenis_kelamin',$request->jenis_kelamin);
+        }
         $getBalita->whereIn('id',$balitaArr);
         $balita = $getBalita->get();
         //dd($balita);
