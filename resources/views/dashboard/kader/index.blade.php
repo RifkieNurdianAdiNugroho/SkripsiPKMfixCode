@@ -33,7 +33,22 @@
                                    placeholder="Cari nama kader" value="{{$request->kader}}" />
                             &nbsp;
                            
-                             <select class="form-control form-control-solid" name="pos_id">
+                             <select class="form-control form-control-solid" 
+                                     name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)">
+                                <option value="" selected disabled>
+                                    Pilih Bidan
+                                </option>
+                                @foreach($bidan as $bidanKey => $bidanItem)
+                                <option value="{{$bidanItem->id}}" 
+                                        {{$request->bidan_id == $bidanItem->id ? 'selected':''}}>
+                                    {{$bidanItem->nama}}
+                                </option>
+                                @endforeach
+                            </select>
+                            &nbsp;
+                            @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'kapus')
+                            <select class="form-control form-control-solid" name="pos_id" id="pos_id">
+                                @if($request->bidan_id != null)
                                 <option value="" selected disabled>
                                     Pilih Pos
                                 </option>
@@ -43,7 +58,22 @@
                                     {{$posyanduItem->nama_pos}}
                                 </option>
                                 @endforeach
+                                @else
+                                 <option value="" selected disabled>
+                                    <small>(Pos) Pilih Bidan Terlebih Dahulu</small>
+                                </option>
+                                @endif
                             </select>
+                            @else
+                             <select class="form-control form-control-solid" name="pos_id">
+                                        @foreach($posyandu as $posyanduKey => $posyanduItem)
+                                        <option value="{{$posyanduItem->id}}" 
+                                                {{$request->pos_id == $posyanduItem->id ? 'selected':''}}>
+                                            {{$posyanduItem->nama_pos}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                            @endif
                             &nbsp;
                             <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                        
@@ -79,7 +109,7 @@
                                 <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                                     <th class="w-10px pe-2">No</th>
                                     <th class="min-w-125px">Nama</th>
-                                    <th class="min-w-125px">No Telepo</th>
+                                    <th class="min-w-125px">No Telepon</th>
                                     <th class="min-w-125px">Alamat</th>
                                     <th class="min-w-125px">Pos</th>
                                     <th class="text-end min-w-100px">Actions</th>
@@ -218,5 +248,40 @@
         KTUtil.onDOMContentLoaded(function() {
             crmList.init();
         });
+
+        function getPosyandu(val) {
+        $.ajax({
+                type: 'get',
+                url: "{{url('/user/bidan/posyandu')}}"+"/"+ val,
+                dataType: 'json',
+                success: function (data) {
+                    var temp = [];
+                    $.each(data, function (key, value) {
+                        temp.push({
+                            v: value,
+                            k: key
+                        });
+                    });
+
+                    var x = document.getElementById("pos_id");
+                    $('#pos_id').empty();
+                    var opt_head = document.createElement('option');
+                    opt_head.text = 'Pilih Pos';
+                    opt_head.value = '0';
+                    opt_head.disabled = true;
+                    opt_head.selected = true;
+                    x.appendChild(opt_head);
+                    for (var i = 0; i < temp[0].v.length; i++) {
+                        var opt = document.createElement('option');
+                        opt.value = temp[0].v[i].id;
+                        opt.text = temp[0].v[i].nama_pos;
+                        x.appendChild(opt);
+                    }
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+       }
     </script>
 @endsection
