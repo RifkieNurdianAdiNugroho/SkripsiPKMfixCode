@@ -35,9 +35,11 @@
                            
                              <select class="form-control form-control-solid" 
                                      name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)">
+                                @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'kapus')
                                 <option value="" selected disabled>
                                     Pilih Bidan
                                 </option>
+                                @endif
                                 @foreach($bidan as $bidanKey => $bidanItem)
                                 <option value="{{$bidanItem->id}}" 
                                         {{$request->bidan_id == $bidanItem->id ? 'selected':''}}>
