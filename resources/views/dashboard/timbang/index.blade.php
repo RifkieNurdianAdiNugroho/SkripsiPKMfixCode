@@ -1,5 +1,8 @@
 @extends('layouts.dashboard.header')
 @section('content')
+<style type="text/css">
+    input[type="number"]:okeh{background-color:red;}
+</style>
 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <div class="toolbar" id="kt_toolbar">
         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
@@ -36,7 +39,7 @@
                             &nbsp;
                             @if($role != 'bidan')
                             <select class="form-control form-control-solid" 
-                                    name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)">
+                                    name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)" required>
                                 <option value="" selected disabled>
                                     Pilih Bidan
                                 </option>
@@ -50,7 +53,7 @@
                             &nbsp;
                             @endif
                             @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'kapus')
-                            <select class="form-control form-control-solid" name="pos_id" id="pos_id">
+                            <select class="form-control form-control-solid" name="pos_id" id="pos_id" required>
                              @if($request->bidan_id != null)
                                 <option value="" selected disabled>
                                     Pilih Pos
@@ -68,7 +71,7 @@
                                 @endif
                             </select>
                             @else
-                             <select class="form-control form-control-solid" name="pos_id">
+                             <select class="form-control form-control-solid" name="pos_id" required>
                                 <option value="" selected disabled>
                                     Pilih Pos
                                 </option>
@@ -170,15 +173,31 @@
                                     </td>
                                    
                                     <td colspan="2">
-                                    <input type="number" step="0.01" name="tb[{{$balitaItem['balita_id']}}][{{$data['jadwal'][$bulanKeyOne]['jadwal_id']}}]" 
- 
+                                    @if($data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['umur'] >= 60)
+                                     <input type="number" step="0.01" name="tb[{{$balitaItem['balita_id']}}][{{$data['jadwal'][$bulanKeyOne]['jadwal_id']}}]" 
+                                    {{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['input']}}
                                     value="{{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['tb']}}"
-                                        class="form-control form-control-solid tb">
+                                        class="form-control form-control-solid tb" style="background-color: red;">
+                                    @else
+                                     <input type="number" step="0.01" name="tb[{{$balitaItem['balita_id']}}][{{$data['jadwal'][$bulanKeyOne]['jadwal_id']}}]" 
+                                    {{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['input']}}
+                                    value="{{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['tb']}}"
+                                        class="form-control form-control-solid tb" >
+                                    @endif
+                                   
                                     </td>
                                     <td colspan="2">
+                                        @if($data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['umur'] >= 60)
                                         <input type="number" step="0.01" name="bb[{{$balitaItem['balita_id']}}][{{$data['jadwal'][$bulanKeyOne]['jadwal_id']}}]" 
+                                        {{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['input']}}
+                                        value="{{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['bb']}}"
+                                        class="form-control form-control-solid bb" style="background-color: red;">
+                                        @else
+                                        <input type="number" step="0.01" name="bb[{{$balitaItem['balita_id']}}][{{$data['jadwal'][$bulanKeyOne]['jadwal_id']}}]" 
+                                        {{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['input']}}
                                         value="{{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['bb']}}"
                                         class="form-control form-control-solid bb">
+                                        @endif
                                     </td>
                                     <td colspan="2">
                                         {{$data['hasil'][$data['jadwal'][$bulanKeyOne]['jadwal_id']][$balitaKey]['status_gizi']}}
