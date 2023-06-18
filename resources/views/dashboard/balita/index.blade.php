@@ -27,55 +27,75 @@
             <div id="kt_content_container" class="container-xxl">
                 
                     <div class="card-header border-0 pt-6">
-                    <form action="{{url('data/balita')}}">
-                    <div class="card-title">
-                        <div class="d-flex align-items-center position-relative my-1" align="right">
-                             <input type="text" name="balita" class="form-control form-control-solid " 
-                                   placeholder="Cari nama balita" value="{{$request->balita}}" />
-                            &nbsp;
-                            <input type="text" name="ortu" class="form-control form-control-solid " 
-                                   placeholder="Cari nama ortu" value="{{$request->ortu}}"/>
-                            &nbsp;
-                            @if(Auth::user()->role == 'bidan')
-                            <select class="form-control form-control-solid" name="bidan_id">
-                                @foreach($bidan as $bidanKey => $bidanIitem)
-                                <option value="{{$bidanIitem->id}}" 
-                                        {{$request->bidan_id == $bidanIitem->id ? 'selected':''}}>
-                                    {{$bidanIitem->nama}}
-                                </option>
-                                @endforeach
-                            </select>
-                            @else
-                            <select class="form-control form-control-solid" name="bidan_id">
-                                <option value="" selected disabled>
-                                    Pilih Bidan
-                                </option>
-                                @foreach($bidan as $bidanKey => $bidanIitem)
-                                <option value="{{$bidanIitem->id}}" 
-                                        {{$request->bidan_id == $bidanIitem->id ? 'selected':''}}>
-                                    {{$bidanIitem->nama}}
-                                </option>
-                                @endforeach
-                            </select>
-                            @endif
-                            &nbsp;
-                           
-                             <select class="form-control form-control-solid" name="pos_id">
-                                <option value="" selected disabled>
-                                    Pilih Pos
-                                </option>
-                                @foreach($posyandu as $posyanduKey => $posyanduItem)
-                                <option value="{{$posyanduItem->id}}" 
-                                        {{$request->pos_id == $posyanduItem->id ? 'selected':''}}>
-                                    {{$posyanduItem->nama_pos}}
-                                </option>
-                                @endforeach
-                            </select>
-                            &nbsp;
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                        </div>
-                    </div>
-                    </form>
+                        <form action="{{url('data/balita')}}">
+                            <div class="card-title">
+                                <div class="d-flex align-items-center position-relative my-1" align="right">
+                                     <input type="text" name="balita" class="form-control form-control-solid " 
+                                           placeholder="Cari nama balita" value="{{$request->balita}}" />
+                                    &nbsp;
+                                    <input type="text" name="ortu" class="form-control form-control-solid " 
+                                           placeholder="Cari nama ortu" value="{{$request->ortu}}"/>
+                                    &nbsp;
+                                    @if(Auth::user()->role == 'bidan')
+                                    <select class="form-control form-control-solid" name="bidan_id">
+                                        @foreach($bidan as $bidanKey => $bidanIitem)
+                                        <option value="{{$bidanIitem->id}}" 
+                                                {{$request->bidan_id == $bidanIitem->id ? 'selected':''}}>
+                                            {{$bidanIitem->nama}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @else
+                                     <select class="form-control form-control-solid" 
+                                             name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)">
+                                        <option value="" selected disabled>
+                                            Pilih Bidan
+                                        </option>
+                                        @foreach($bidan as $bidanKey => $bidanItem)
+                                        <option value="{{$bidanItem->id}}" 
+                                                {{$request->bidan_id == $bidanItem->id ? 'selected':''}}>
+                                            {{$bidanItem->nama}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @endif
+                                    &nbsp;
+                                    @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'kapus')
+                                    <select class="form-control form-control-solid" name="pos_id" id="pos_id">
+                                     @if($request->bidan_id != null)
+                                        <option value="" selected disabled>
+                                            Pilih Pos
+                                        </option>
+                                        @foreach($posyandu as $posyanduKey => $posyanduItem)
+                                        <option value="{{$posyanduItem->id}}" 
+                                                {{$request->pos_id == $posyanduItem->id ? 'selected':''}}>
+                                            {{$posyanduItem->nama_pos}}
+                                        </option>
+                                        @endforeach
+                                        @else
+                                         <option value="" selected disabled>
+                                            <small>(Pos) Pilih Bidan Terlebih Dahulu</small>
+                                        </option>
+                                        @endif
+                                    </select>
+                                    @else
+                                     <select class="form-control form-control-solid" name="pos_id">
+                                        <option value="" selected disabled>
+                                            Pilih Pos
+                                        </option>
+                                        @foreach($posyandu as $posyanduKey => $posyanduItem)
+                                        <option value="{{$posyanduItem->id}}" 
+                                                {{$request->pos_id == $posyanduItem->id ? 'selected':''}}>
+                                            {{$posyanduItem->nama_pos}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @endif
+                                    &nbsp;
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 
                     <div class="card-header border-0 pt-6">
@@ -250,5 +270,40 @@
         KTUtil.onDOMContentLoaded(function() {
             crmList.init();
         });
+
+        function getPosyandu(val) {
+        $.ajax({
+                type: 'get',
+                url: "{{url('/user/bidan/posyandu')}}"+"/"+ val,
+                dataType: 'json',
+                success: function (data) {
+                    var temp = [];
+                    $.each(data, function (key, value) {
+                        temp.push({
+                            v: value,
+                            k: key
+                        });
+                    });
+
+                    var x = document.getElementById("pos_id");
+                    $('#pos_id').empty();
+                    var opt_head = document.createElement('option');
+                    opt_head.text = 'Pilih Pos';
+                    opt_head.value = '0';
+                    opt_head.disabled = true;
+                    opt_head.selected = true;
+                    x.appendChild(opt_head);
+                    for (var i = 0; i < temp[0].v.length; i++) {
+                        var opt = document.createElement('option');
+                        opt.value = temp[0].v[i].id;
+                        opt.text = temp[0].v[i].nama_pos;
+                        x.appendChild(opt);
+                    }
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+       }
     </script>
 @endsection
