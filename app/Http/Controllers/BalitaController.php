@@ -44,26 +44,13 @@ class BalitaController extends Controller
         $balitaArr = [];
         if(count($request->all()) > 0)
         {
-            if($request->pos_id != null)
+            if($request->pos_id != null && $request->bidan_id != null)
             {
-                $hasilPos = DB::table('posyandu_hasil as ph')
-                            ->join('posyandu_jadwal as pj','ph.jadwal_id','=','pj.id')
-                            ->where('pj.posyandu_id',$request->pos_id)
-                            ->select('ph.balita_id')
-                            ->groupBy('ph.balita_id')
-                            ->get();
-                foreach ($hasilPos as $key => $value) 
-                {
-                    array_push($balitaArr, $value->balita_id);
-                }
-            }
-            if($request->bidan_id != null)
-            {
-                $hasilPos = DB::table('posyandu_hasil as ph')
-                            ->join('posyandu_jadwal as pj','ph.jadwal_id','=','pj.id')
-                            ->where('ph.bidan_id',$request->bidan_id)
-                            ->select('ph.balita_id')
-                            ->groupBy('ph.balita_id')
+                $hasilPos = DB::table('posyandu_bidan as pb')
+                            ->join('posyandu_balita_bidan as pbb','pbb.posyandu_bidan_id','=','pb.id')
+                            ->where('pb.posyandu_id',$request->pos_id)
+                            ->where('pb.bidan_id',$request->bidan_id)
+                            ->select('pbb.balita_id')
                             ->get();
                 foreach ($hasilPos as $key => $value) 
                 {
@@ -91,24 +78,49 @@ class BalitaController extends Controller
 
     public function create()
     {
-        return view('dashboard.balita.add');
+        if(Auth::user()->role == 'bidan')
+        {
+            $userId = Auth::user()->id;
+            $bidan = DB::table('bidan')->where('user_id',$userId)->get();
+            $bidanUser = DB::table('bidan')->where('user_id',$userId)->first();
+            $posyandu = DB::table('posyandu_bidan as pb')
+                        ->join('posyandu as pos','pos.id','=','pb.posyandu_id')
+                        ->where('pb.bidan_id',$bidanUser->id)
+                        ->select('pos.id','pos.nama_pos')
+                        ->get();
+        }else
+        {
+            $bidan = DB::table('bidan')->get();
+            $posyandu = [];
+        }
+        return view('dashboard.balita.add',compact('bidan','posyandu'));
     }
 
     public function store(Request $request)
     {
+        //dd($request->all());
         $createdAt = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
-        DB::table('balita')->insert([
-            'nama'=>$request->nama,
-            'nama_ortu'=>$request->nama_ortu,
-            'pjg_lahir'=>$request->pjg_lahir,
-            'bb_lahir'=>$request->bb_lahir,
-            'tgl_lahir'=>$request->tgl_lahir,
-            'alamat'=>$request->alamat,
-            'gakin'=>$request->gakin,
-            'anak_ke'=>$request->anak_ke,
-            'jenis_kelamin'=>$request->jenis_kelamin,
-            'created_at'=>$createdAt
-        ]);
+        $balitaId = DB::table('balita')->insertGetId([
+                    'nama'=>$request->nama,
+                    'nama_ortu'=>$request->nama_ortu,
+                    'pjg_lahir'=>$request->pjg_lahir,
+                    'bb_lahir'=>$request->bb_lahir,
+                    'tgl_lahir'=>$request->tgl_lahir,
+                    'alamat'=>$request->alamat,
+                    'gakin'=>$request->gakin,
+                    'anak_ke'=>$request->anak_ke,
+                    'jenis_kelamin'=>$request->jenis_kelamin,
+                    'created_at'=>$createdAt
+                ]);
+        $posBidan = DB::table('posyandu_bidan')->where('bidan_id',$request->bidan_id)->where('posyandu_id',$request->pos_id)->first();
+        if($posBidan)
+        {
+            DB::table('posyandu_balita_bidan')->insert([
+                'balita_id'=>$balitaId,
+                'posyandu_bidan_id'=>$posBidan->id,
+                'created_at'=>$createdAt
+            ]);
+        }
         return redirect('data/balita')->with('success','Berhasil menambahakan data Balita');
     }
 
@@ -121,7 +133,57 @@ class BalitaController extends Controller
         {
             return redirect('data/balita')->with('error','Tidak dapat menemukan data Balita');
         }
-        return view('dashboard.balita.edit',compact('data'));
+        $posBidanId = 0;
+        $posBidanPosId = 0;
+        if(Auth::user()->role == 'bidan')
+        {
+            $userId = Auth::user()->id;
+            $bidan = DB::table('bidan')->where('user_id',$userId)->get();
+            $bidanUser = DB::table('bidan')->where('user_id',$userId)->first();
+            $posyandu = DB::table('posyandu_bidan as pb')
+                    ->join('posyandu as pos','pos.id','=','pb.posyandu_id')
+                    ->where('pb.bidan_id',$bidanUser->id)
+                    ->select('pos.id','pos.nama_pos')
+                    ->get();
+            $posBidanId = $bidanUser->id;
+            $posBidan = DB::table('posyandu_balita_bidan')->where('balita_id',$id)->first();
+            if($posBidan)
+            {
+                $posNya = DB::table('posyandu_bidan')->where('id',$posBidan->posyandu_bidan_id)->first();
+                if($posNya)
+                {
+                    $posBidanPosId = $posNya->posyandu_id;
+                }
+            }
+        }else
+        {
+            $bidan = DB::table('bidan')->get();
+            $posBidan = DB::table('posyandu_balita_bidan')->where('balita_id',$id)->first();
+            $posyandu = [];
+            if($posBidan)
+            {
+                
+                $posyanduFisrt = DB::table('posyandu_bidan as pb')
+                    ->where('pb.id',$posBidan->posyandu_bidan_id)
+                    ->first();
+                //dd($posyanduFisrt);
+                if($posyanduFisrt)
+                {
+                    $posBidanId = $posyanduFisrt->bidan_id;
+                    $posyandu = DB::table('posyandu_bidan as pb')
+                    ->join('posyandu as pos','pos.id','=','pb.posyandu_id')
+                    ->where('pb.bidan_id',$posBidanId)
+                    ->select('pos.id','pos.nama_pos')
+                    ->get();
+                }
+                $posNya = DB::table('posyandu_bidan')->where('id',$posBidan->posyandu_bidan_id)->first();
+                if($posNya)
+                {
+                    $posBidanPosId = $posNya->posyandu_id;
+                }
+            }
+        }
+        return view('dashboard.balita.edit',compact('data','bidan','posyandu','posBidanId','posBidanPosId'));
     }
 
     public function update(Request $request,$id)
@@ -141,7 +203,21 @@ class BalitaController extends Controller
                 'anak_ke'=>$request->anak_ke,
                 'updated_at'=>$createdAt,
             ]);
-
+        $posBidan = DB::table('posyandu_bidan')->where('bidan_id',$request->bidan_id)->where('posyandu_id',$request->pos_id)->first();
+        //dd($posBidan);
+        if($posBidan)
+        {
+            $check = DB::table('posyandu_balita_bidan')->where('posyandu_bidan_id',$posBidan->id)->where('balita_id',$id)->first();
+            if(!$check)
+            {
+                DB::table('posyandu_balita_bidan')->where('balita_id',$id)->delete();
+                DB::table('posyandu_balita_bidan')->insert([
+                    'balita_id'=>$id,
+                    'posyandu_bidan_id'=>$posBidan->id,
+                    'created_at'=>$createdAt
+                ]);
+            }
+        }
         return redirect('data/balita')->with('success','Berhasil mengubah data Balita');
     }
 
