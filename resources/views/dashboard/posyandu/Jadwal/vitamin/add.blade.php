@@ -52,7 +52,7 @@
                                         title="Bidan"></i>
                                 </label>
                                <select required class="form-control" name="bidan_id">
-                                    <option value="" selected disabled>Pilih Bidan</option>
+                                    
                                     @foreach($bidan as $key => $item)
                                         <option value="{{$item->id}}">
                                             {{$item->nama}}
