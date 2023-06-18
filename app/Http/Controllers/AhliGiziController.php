@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
 use Auth;
+use Session;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DataAhliGiziExport;
 class AhliGiziController extends Controller
 {
 
@@ -19,7 +22,13 @@ class AhliGiziController extends Controller
                 ->join('users as us','us.id','=','agz.user_id')
                 ->select('agz.*','us.email')
                 ->get();
+        Session::put('dataAhliGizi',$data);
         return view('dashboard.ahli_gizi.index',compact('data'));
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new DataAhliGiziExport, 'data_ahli_gizi.xlsx');
     }
 
     public function create()
