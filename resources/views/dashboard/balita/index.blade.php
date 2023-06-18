@@ -47,7 +47,7 @@
                                     </select>
                                     @else
                                      <select class="form-control form-control-solid" 
-                                             name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)">
+                                             name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)" required>
                                         <option value="" selected disabled>
                                             Pilih Bidan
                                         </option>
@@ -61,7 +61,7 @@
                                     @endif
                                     &nbsp;
                                     @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'kapus')
-                                    <select class="form-control form-control-solid" name="pos_id" id="pos_id">
+                                    <select class="form-control form-control-solid" name="pos_id" id="pos_id" required>
                                      @if($request->bidan_id != null)
                                         <option value="" selected disabled>
                                             Pilih Pos
@@ -79,7 +79,7 @@
                                         @endif
                                     </select>
                                     @else
-                                     <select class="form-control form-control-solid" name="pos_id">
+                                     <select class="form-control form-control-solid" name="pos_id" required>
                                         <option value="" selected disabled>
                                             Pilih Pos
                                         </option>
@@ -289,7 +289,7 @@
                     $('#pos_id').empty();
                     var opt_head = document.createElement('option');
                     opt_head.text = 'Pilih Pos';
-                    opt_head.value = '0';
+                    opt_head.value = '';
                     opt_head.disabled = true;
                     opt_head.selected = true;
                     x.appendChild(opt_head);
