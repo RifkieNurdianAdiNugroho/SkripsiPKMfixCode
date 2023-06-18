@@ -41,6 +41,7 @@ Route::prefix('user')->group(function () {
     });
     Route::prefix('bidan')->group(function () {
         Route::get('/', [BidanController::class, 'index']);
+        Route::get('/posyandu/{id}', [BidanController::class, 'posyandu']);
         Route::get('/create', [BidanController::class, 'create']);
         Route::get('/edit/{id}', [BidanController::class, 'edit']);
         Route::get('/delete/{id}', [BidanController::class, 'delete']);
