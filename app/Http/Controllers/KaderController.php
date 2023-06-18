@@ -31,7 +31,7 @@ class KaderController extends Controller
             $kader->select('kd.*','pos.nama_pos');
             $data = $kader->get();
         }
-        $bidan = DB::table('bidan')->get();
+        
         $posyandu = [];
         if(Auth::user()->role == 'bidan')
         {
@@ -43,8 +43,10 @@ class KaderController extends Controller
                     ->select('pd.*')
                     ->groupBy('pd.id')
                     ->get();
+            $bidan = DB::table('bidan')->where('user_id',$userId)->get();
         }else
         {
+            $bidan = DB::table('bidan')->get();
             if($request->bidan_id != null)
             {
                 $posyandu = DB::table('posyandu as pd')
@@ -60,7 +62,15 @@ class KaderController extends Controller
 
     public function create()
     {
-        $pos = DB::table('posyandu')->get();
+            $userId = Auth::user()->id;
+            $bidanAuth = DB::table('bidan')->where('user_id',$userId)->first();
+            $pos = DB::table('posyandu as pd')
+                    ->join('posyandu_bidan as pb','pb.posyandu_id','=','pd.id')
+                    ->where('pb.bidan_id',$bidanAuth->id)
+                    ->select('pd.*')
+                    ->groupBy('pd.id')
+                    ->get();
+
         return view('dashboard.kader.add',compact('pos'));
     }
 
@@ -86,7 +96,14 @@ class KaderController extends Controller
         {
             return redirect('data/kader')->with('error','Tidak dapat menemukan data Kader');
         }
-        $pos = DB::table('posyandu')->get();
+         $userId = Auth::user()->id;
+            $bidanAuth = DB::table('bidan')->where('user_id',$userId)->first();
+            $pos = DB::table('posyandu as pd')
+                    ->join('posyandu_bidan as pb','pb.posyandu_id','=','pd.id')
+                    ->where('pb.bidan_id',$bidanAuth->id)
+                    ->select('pd.*')
+                    ->groupBy('pd.id')
+                    ->get();
         return view('dashboard.kader.edit',compact('data','pos'));
     }
 
