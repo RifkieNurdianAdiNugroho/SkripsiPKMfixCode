@@ -29,68 +29,81 @@
             <div class="card">
                 <div class="card-header border-0 pt-6">
                     <form action="{{url('data/jadwal/timbang')}}">
-                    <div class="card-title">
-                        <div class="d-flex align-items-center position-relative my-1">
-                            <input type="text" name="balita" class="form-control form-control-solid " 
-                                   placeholder="Cari nama balita" value="{{$request->balita}}" />
-                            &nbsp;
-                            <input type="text" name="ortu" class="form-control form-control-solid " 
-                                   placeholder="Cari nama ortu" value="{{$request->ortu}}"/>
-                            &nbsp;
-                            @if($role != 'bidan')
-                            <select class="form-control form-control-solid" 
-                                    name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)" required>
-                                <option value="" selected disabled>
-                                    Pilih Bidan
-                                </option>
-                                @foreach($bidan as $bidanKey => $bidanIitem)
-                                <option value="{{$bidanIitem->id}}" 
-                                        {{$request->bidan_id == $bidanIitem->id ? 'selected':''}}>
-                                    {{$bidanIitem->nama}}
-                                </option>
-                                @endforeach
-                            </select>
-                            &nbsp;
-                            @endif
-                            @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'kapus')
-                            <select class="form-control form-control-solid" name="pos_id" id="pos_id" required>
-                             @if($request->bidan_id != null)
-                                <option value="" selected disabled>
-                                    Pilih Pos
-                                </option>
-                                @foreach($posyandu as $posyanduKey => $posyanduItem)
-                                <option value="{{$posyanduItem->id}}" 
-                                        {{$request->pos_id == $posyanduItem->id ? 'selected':''}}>
-                                    {{$posyanduItem->nama_pos}}
-                                </option>
-                                @endforeach
-                                @else
-                                 <option value="" selected disabled>
-                                    <small>(Pos) Pilih Bidan Terlebih Dahulu</small>
-                                </option>
+                        <div class="card-title">
+                            <div class="d-flex align-items-center position-relative my-1">
+                                <input type="text" name="balita" class="form-control form-control-solid " 
+                                       placeholder="Cari nama balita" value="{{$request->balita}}" />
+                                &nbsp;
+                                <input type="text" name="ortu" class="form-control form-control-solid " 
+                                       placeholder="Cari nama ortu" value="{{$request->ortu}}"/>
+                                &nbsp;
+                                <select class="form-control form-control-solid" 
+                                        name="jenis_kelamin" id="jenis_kelamin" >
+                                    <option value="" selected disabled>
+                                        Pilih Kelamin
+                                    </option>
+                                    <option value="L" {{$request->jenis_kelamin == 'L' ? 'selected':''}}>
+                                        L
+                                    </option>
+                                    <option value="P" {{$request->jenis_kelamin == 'P' ? 'selected':''}}>
+                                        P
+                                    </option>
+                                </select>
+                                &nbsp;
+                                @if($role != 'bidan')
+                                <select class="form-control form-control-solid" 
+                                        name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)" required>
+                                    <option value="" selected disabled>
+                                        Pilih Bidan
+                                    </option>
+                                    @foreach($bidan as $bidanKey => $bidanIitem)
+                                    <option value="{{$bidanIitem->id}}" 
+                                            {{$request->bidan_id == $bidanIitem->id ? 'selected':''}}>
+                                        {{$bidanIitem->nama}}
+                                    </option>
+                                    @endforeach
+                                </select>
+                                &nbsp;
                                 @endif
-                            </select>
-                            @else
-                             <select class="form-control form-control-solid" name="pos_id" required>
-                                <option value="" selected disabled>
-                                    Pilih Pos
-                                </option>
-                                @foreach($posyandu as $posyanduKey => $posyanduItem)
-                                <option value="{{$posyanduItem->id}}" 
-                                        {{$request->pos_id == $posyanduItem->id ? 'selected':''}}>
-                                    {{$posyanduItem->nama_pos}}
-                                </option>
-                                @endforeach
-                            </select>
-                            @endif
-                            &nbsp;
-                            <input type="month" name="start_month" value="{{$request->start_month}}" class="form-control form-control-solid" />
-                            &nbsp;
-                            <input type="month" name="end_month" value="{{$request->end_month}}" class="form-control form-control-solid" />
-                            &nbsp;
-                            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'kapus')
+                                <select class="form-control form-control-solid" name="pos_id" id="pos_id" required>
+                                 @if($request->bidan_id != null)
+                                    <option value="" selected disabled>
+                                        Pilih Pos
+                                    </option>
+                                    @foreach($posyandu as $posyanduKey => $posyanduItem)
+                                    <option value="{{$posyanduItem->id}}" 
+                                            {{$request->pos_id == $posyanduItem->id ? 'selected':''}}>
+                                        {{$posyanduItem->nama_pos}}
+                                    </option>
+                                    @endforeach
+                                    @else
+                                     <option value="" selected disabled>
+                                        <small>(Pos) Pilih Bidan Terlebih Dahulu</small>
+                                    </option>
+                                    @endif
+                                </select>
+                                @else
+                                 <select class="form-control form-control-solid" name="pos_id" required>
+                                    <option value="" selected disabled>
+                                        Pilih Pos
+                                    </option>
+                                    @foreach($posyandu as $posyanduKey => $posyanduItem)
+                                    <option value="{{$posyanduItem->id}}" 
+                                            {{$request->pos_id == $posyanduItem->id ? 'selected':''}}>
+                                        {{$posyanduItem->nama_pos}}
+                                    </option>
+                                    @endforeach
+                                </select>
+                                @endif
+                                &nbsp;
+                                <input type="month" name="start_month" value="{{$request->start_month}}" class="form-control form-control-solid" />
+                                &nbsp;
+                                <input type="month" name="end_month" value="{{$request->end_month}}" class="form-control form-control-solid" />
+                                &nbsp;
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                            </div>
                         </div>
-                    </div>
                     </form>
                     <form action="{{url('data/jadwal/timbang/store')}}" method="POST">
                     @csrf
