@@ -35,7 +35,8 @@
                                    placeholder="Cari nama ortu" value="{{$request->ortu}}"/>
                             &nbsp;
                             @if($role != 'bidan')
-                            <select class="form-control form-control-solid" name="bidan_id">
+                            <select class="form-control form-control-solid" 
+                                    name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)">
                                 <option value="" selected disabled>
                                     Pilih Bidan
                                 </option>
@@ -48,6 +49,25 @@
                             </select>
                             &nbsp;
                             @endif
+                            @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'kapus')
+                            <select class="form-control form-control-solid" name="pos_id" id="pos_id">
+                             @if($request->bidan_id != null)
+                                <option value="" selected disabled>
+                                    Pilih Pos
+                                </option>
+                                @foreach($posyandu as $posyanduKey => $posyanduItem)
+                                <option value="{{$posyanduItem->id}}" 
+                                        {{$request->pos_id == $posyanduItem->id ? 'selected':''}}>
+                                    {{$posyanduItem->nama_pos}}
+                                </option>
+                                @endforeach
+                                @else
+                                 <option value="" selected disabled>
+                                    <small>(Pos) Pilih Bidan Terlebih Dahulu</small>
+                                </option>
+                                @endif
+                            </select>
+                            @else
                              <select class="form-control form-control-solid" name="pos_id">
                                 <option value="" selected disabled>
                                     Pilih Pos
@@ -59,6 +79,7 @@
                                 </option>
                                 @endforeach
                             </select>
+                            @endif
                             &nbsp;
                             <input type="month" name="start_month" value="{{$request->start_month}}" class="form-control form-control-solid" />
                             &nbsp;
@@ -261,5 +282,40 @@
     KTUtil.onDOMContentLoaded(function() {
         crmList.init();
     });
+
+    function getPosyandu(val) {
+        $.ajax({
+                type: 'get',
+                url: "{{url('/user/bidan/posyandu')}}"+"/"+ val,
+                dataType: 'json',
+                success: function (data) {
+                    var temp = [];
+                    $.each(data, function (key, value) {
+                        temp.push({
+                            v: value,
+                            k: key
+                        });
+                    });
+
+                    var x = document.getElementById("pos_id");
+                    $('#pos_id').empty();
+                    var opt_head = document.createElement('option');
+                    opt_head.text = 'Pilih Pos';
+                    opt_head.value = '0';
+                    opt_head.disabled = true;
+                    opt_head.selected = true;
+                    x.appendChild(opt_head);
+                    for (var i = 0; i < temp[0].v.length; i++) {
+                        var opt = document.createElement('option');
+                        opt.value = temp[0].v[i].id;
+                        opt.text = temp[0].v[i].nama_pos;
+                        x.appendChild(opt);
+                    }
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+       }
 </script>
 @endsection
