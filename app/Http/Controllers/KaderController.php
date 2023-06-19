@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
 use Auth;
+use Session;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DataKaderExport;
 class KaderController extends Controller
 {
 
@@ -57,7 +60,13 @@ class KaderController extends Controller
                             ->get();
             }
         }
+        Session::put('dataKader',$data);
         return view('dashboard.kader.index',compact('data','request','bidan','posyandu'));
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new DataKaderExport, 'data_kader.xlsx');
     }
 
     public function create()
