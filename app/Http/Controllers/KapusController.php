@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
 use Auth;
+use Session;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DataKapusExport;
 class KapusController extends Controller
 {
 
@@ -19,7 +22,13 @@ class KapusController extends Controller
                 ->join('users as us','us.id','=','kp.user_id')
                 ->select('kp.*','us.email')
                 ->get();
+        Session::put('dataKapus',$data);
         return view('dashboard.kapus.index',compact('data'));
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new DataKapusExport, 'data_kapus.xlsx');
     }
 
     public function create()
