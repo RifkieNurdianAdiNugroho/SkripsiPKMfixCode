@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
 use Auth;
+use Session;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DataJadwalVitaminExport;
 class JadwalVitaminController extends Controller
 {
 
@@ -65,7 +68,13 @@ class JadwalVitaminController extends Controller
                             ->get();
             }
         }
+        Session::put('dataJadwalVitamin',$data);
         return view('dashboard.posyandu.jadwal.vitamin.index',compact('data','request','bidan','posyandu'));
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new DataJadwalVitaminExport, 'data_jadwal_vitamin.xlsx');
     }
 
      public function create()
