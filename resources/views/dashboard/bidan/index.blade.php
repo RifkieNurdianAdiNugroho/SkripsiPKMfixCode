@@ -40,9 +40,17 @@
                                     </svg>
                                 </span>
                                 <input type="text" data-kt-user-table-filter="search"
-                                    class="form-control form-control-solid w-250px ps-14" placeholder="Search user" />
+                                    class="form-control form-control-solid w-250px ps-14" placeholder="Cari Nama Bidan" />
                             </div>
                         </div>
+                        @if(Auth::user()->role == 'kapus')
+                        <div align="right">
+                            <a class="btn btn-success" href="{{url('user/bidan/export')}}">
+                                Export Data Bidan &nbsp;<i class="fa fa-file-excel"></i>
+                            </a>
+                        </div>
+                        @endif
+                        @if(Auth::user()->role == 'ahli_gizi')
                         <div class="card-toolbar">
                             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                                 <a href="{{ url('/user/bidan/create') }}" class="btn btn-primary">
@@ -59,6 +67,7 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
                     </div>
                     <div class="card-body py-4">
                         <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_crm_table">
@@ -87,6 +96,7 @@
                                             <small><b>Polindes</b> : {{$item->polindes}}</small>
                                         </td>
                                         <td class="text-end">
+                                            @if(Auth::user()->role == 'ahli_gizi')
                                             <a href="#" class="btn btn-light btn-active-light-primary btn-sm"
                                                 data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
                                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
@@ -113,6 +123,7 @@
                                                         data-kt-users-table-filter="delete_row">Delete</a>
                                                 </div>
                                             </div>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
