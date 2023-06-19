@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
 use Auth;
+use Session;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DataJadwalPosExport;
 class JadwalPosController extends Controller
 {
 
@@ -65,7 +68,13 @@ class JadwalPosController extends Controller
                             ->get();
             }
         }
+        Session::put('dataJadwalPos',$data);
         return view('dashboard.posyandu.jadwal.pos.index',compact('data','request','bidan','posyandu'));
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new DataJadwalPosExport, 'data_jadwal_posyandu.xlsx');
     }
 
      public function create()
