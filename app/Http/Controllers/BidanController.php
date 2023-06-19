@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
 use Auth;
+use Session;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DataBidanExport;
 class BidanController extends Controller
 {
 
@@ -19,7 +22,13 @@ class BidanController extends Controller
                 ->join('users as us','us.id','=','bd.user_id')
                 ->select('bd.*','us.email')
                 ->get();
+        Session::put('dataBidan',$data);
         return view('dashboard.bidan.index',compact('data'));
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new DataBidanExport, 'data_bidan.xlsx');
     }
 
     public function posyandu($id)
