@@ -25,7 +25,6 @@
         </div>
         <div class="post d-flex flex-column-fluid" id="kt_post">
             <div id="kt_content_container" class="container-xxl">
-                
                     <div class="card-header border-0 pt-6">
                         <form action="{{url('data/balita')}}">
                             <div class="card-title">
@@ -35,6 +34,19 @@
                                     &nbsp;
                                     <input type="text" name="ortu" class="form-control form-control-solid " 
                                            placeholder="Cari nama ortu" value="{{$request->ortu}}"/>
+                                    &nbsp;
+                                    <select class="form-control form-control-solid" 
+                                            name="jenis_kelamin" id="jenis_kelamin" >
+                                        <option value="" selected disabled>
+                                            Pilih Kelamin
+                                        </option>
+                                        <option value="L" {{$request->jenis_kelamin == 'L' ? 'selected':''}}>
+                                            L
+                                        </option>
+                                        <option value="P" {{$request->jenis_kelamin == 'P' ? 'selected':''}}>
+                                            P
+                                        </option>
+                                    </select>
                                     &nbsp;
                                     @if(Auth::user()->role == 'bidan')
                                     <select class="form-control form-control-solid" name="bidan_id">
@@ -99,7 +111,6 @@
                     </div>
                 
                     <div class="card-header border-0 pt-6">
-
                         @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'bidan')
                         <div class="card-toolbar">
                             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
@@ -119,6 +130,15 @@
                         </div>
                         @endif
                     </div>
+                    @if(Auth::user()->role == 'kapus' || Auth::user()->role == 'bidan')
+                        @if(count($request->all()) > 0)
+                        <div align="right">
+                            <a class="btn btn-success" href="{{url('data/balita/export')}}">
+                                    Export Data Balita &nbsp;<i class="fa fa-file-excel"></i>
+                            </a>
+                        </div>
+                        @endif
+                    @endif
                     <div class="card-body py-4">
                         <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_crm_table">
                             <thead>
@@ -126,6 +146,7 @@
                                     <th class="w-10px pe-2">No</th>
                                     <th class="min-w-125px">Nama</th>
                                     <th class="min-w-125px">Ortu</th>
+                                    <th class="min-w-125px">Jenis Kelamin</th>
                                     <th class="min-w-125px">Tgl Lahir</th>
                                     <th class="min-w-125px">BB Lahir</th>
                                     <th class="min-w-125px">Panjang Lahir</th>
@@ -141,6 +162,7 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{$item->nama}}</td>
                                         <td>{{$item->nama_ortu}}</td>
+                                        <td>{{$item->jenis_kelamin}}</td>
                                         <td>{{$item->tgl_lahir}}</td>
                                         <td>{{$item->bb_lahir}}</td>
                                         <td>{{$item->pjg_lahir}}</td>
