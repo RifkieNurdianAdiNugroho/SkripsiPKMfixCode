@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
+use Session;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DataPosyanduExport;
 class PosyanduController extends Controller
 {
 
@@ -33,8 +36,14 @@ class PosyanduController extends Controller
              }
            }
         }
-        //dd($bidanPos);
+        Session::put('dataPosyandu',$data);
+        Session::put('bidanPos',$bidanPos);
         return view('dashboard.posyandu.index',compact('data','bidanPos'));
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new DataPosyanduExport, 'data_posyandu.xlsx');
     }
 
     public function create()
