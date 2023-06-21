@@ -114,6 +114,15 @@
                         </div>
                         @endif
                     </div>
+                    @if(Auth::user()->role == 'kapus')
+                    @if(count($request->all()) > 0)
+                    <div align="right">
+                        <a class="btn btn-success" href="{{url('data/jadwal/vitamin/export')}}">
+                                Export Data Jadwal Vitamin &nbsp;<i class="fa fa-file-excel"></i>
+                        </a>
+                    </div>
+                    @endif
+                    @endif
                     <div class="card-body py-4">
                         <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_crm_table">
                             <thead>
