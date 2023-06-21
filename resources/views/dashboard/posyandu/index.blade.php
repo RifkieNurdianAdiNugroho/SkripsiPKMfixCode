@@ -40,9 +40,16 @@
                                     </svg>
                                 </span>
                                 <input type="text" data-kt-user-table-filter="search"
-                                    class="form-control form-control-solid w-250px ps-14" placeholder="Search user" />
+                                    class="form-control form-control-solid w-250px ps-14" placeholder="Cari Nama Pos" />
                             </div>
                         </div>
+                        @if(Auth::user()->role == 'kapus')
+                         <div align="right">
+                            <a class="btn btn-success" href="{{url('data/posyandu/export')}}">
+                                Export Data Posyandu &nbsp;<i class="fa fa-file-excel"></i>
+                            </a>    
+                        </div>
+                        @endif
                         @if(Auth::user()->role == 'ahli_gizi')
                         <div class="card-toolbar">
                             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
