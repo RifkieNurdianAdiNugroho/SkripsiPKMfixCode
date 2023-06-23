@@ -29,13 +29,30 @@
 
                         <form class="form" action="{{ url('data/jadwal/posyandu/update/'.$data->id) }}" method="post" enctype="multipart/form-data">
                         @csrf
+                        <div class="fv-row mb-7">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Bidan</span>
+                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
+                                        title="Bidan"></i>
+                                </label>
+                               <select required class="form-control" name="bidan_id" onchange="getPosyandu(this.value)">
+                                    <option value="" selected disabled>Pilih Bidan</option>
+                                    @foreach($bidan as $key => $item)
+                                        <option value="{{$item->id}}"
+                                            {{$data->bidan_id == $item->id ? 'selected' : ''}}>
+                                            {{$item->nama}}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                             <div class="fv-row mb-7">
                                 <label class="fs-6 fw-bold form-label mt-3">
                                     <span class="required">Pos</span>
                                     <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
                                         title="Pos."></i>
                                 </label>
-                                <select required class="form-control" name="posyandu_id">
+                                <select required class="form-control" name="posyandu_id" id="pos_id">
                                     <option value="" selected disabled>Pilih Pos</option>
                                     @foreach($posyandu as $key => $item)
                                         <option value="{{$item->id}}" 
@@ -46,22 +63,7 @@
                                 </select>
                             </div>
 
-                            <div class="fv-row mb-7">
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">Bidan</span>
-                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
-                                        title="Bidan"></i>
-                                </label>
-                               <select required class="form-control" name="bidan_id">
-                                    <option value="" selected disabled>Pilih Bidan</option>
-                                    @foreach($bidan as $key => $item)
-                                        <option value="{{$item->id}}"
-                                            {{$data->bidan_id == $item->id ? 'selected' : ''}}>
-                                            {{$item->nama}}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            
 
                              <div class="fv-row mb-7">
                                 <label class="fs-6 fw-bold form-label mt-3">
@@ -108,5 +110,40 @@
             return true;
 
         }
+
+        function getPosyandu(val) {
+        $.ajax({
+                type: 'get',
+                url: "{{url('/user/bidan/posyandu')}}"+"/"+ val,
+                dataType: 'json',
+                success: function (data) {
+                    var temp = [];
+                    $.each(data, function (key, value) {
+                        temp.push({
+                            v: value,
+                            k: key
+                        });
+                    });
+
+                    var x = document.getElementById("pos_id");
+                    $('#pos_id').empty();
+                    var opt_head = document.createElement('option');
+                    opt_head.text = 'Pilih Pos';
+                    opt_head.value = '0';
+                    opt_head.disabled = true;
+                    opt_head.selected = true;
+                    x.appendChild(opt_head);
+                    for (var i = 0; i < temp[0].v.length; i++) {
+                        var opt = document.createElement('option');
+                        opt.value = temp[0].v[i].id;
+                        opt.text = temp[0].v[i].nama_pos;
+                        x.appendChild(opt);
+                    }
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+       }
     </script>
 @endsection
