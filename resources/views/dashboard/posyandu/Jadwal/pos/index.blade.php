@@ -33,7 +33,7 @@
                                            placeholder="Cari nama balita" value="{{$request->tanggal}}" />
                                     &nbsp;
                                     @if(Auth::user()->role == 'bidan')
-                                    <select class="form-control form-control-solid" name="bidan_id">
+                                    <select class="form-control form-control-solid" name="bidan_id" required>
                                         @foreach($bidan as $bidanKey => $bidanIitem)
                                         <option value="{{$bidanIitem->id}}" 
                                                 {{$request->bidan_id == $bidanIitem->id ? 'selected':''}}>
@@ -43,7 +43,7 @@
                                     </select>
                                     @else
                                      <select class="form-control form-control-solid" 
-                                             name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)">
+                                             name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)" required>
                                         <option value="" selected disabled>
                                             Pilih Bidan
                                         </option>
