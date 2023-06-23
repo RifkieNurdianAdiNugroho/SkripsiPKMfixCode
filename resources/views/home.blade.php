@@ -35,7 +35,7 @@
                                     <span class="svg-icon svg-icon-3x svg-icon-white d-block mt-5 mb-2">
                                         <i class="fa fa-heartbeat fs-1 text-white"></i>
                                     </span>
-                                    <a href="{{ url('/user/manager_index') }}" class="text-white fw-bold fs-6">Ahli Gizi</a>
+                                    <a href="{{ url('/user/ahli_gizi') }}" class="text-white fw-bold fs-6">Ahli Gizi</a>
                                 </div>
                                 <div class="col-6 d-flex align-items-center">
                                     <h1 class="text-white">
@@ -50,10 +50,10 @@
                                     <span class="svg-icon svg-icon-3x svg-icon-white d-block mt-5 mb-2">
                                         <i class="fa fa-stethoscope fs-1 text-white"></i>
                                     </span>
-                                    <a href="/user/teller_index" class="text-white fw-bold fs-6">Bidan</a>
+                                    <a href="/user/bidan" class="text-white fw-bold fs-6">Bidan</a>
                                 </div>
                                 <div class="col-6 d-flex align-items-center">
-                                    <h1 class="text-white"></h1>
+                                    <h1 class="text-white">50</h1>
                                 </div>
                             </div>
                         </div>
@@ -63,7 +63,7 @@
                                     <span class="svg-icon svg-icon-3x svg-icon-white d-block mt-5 mb-2">
                                         <i class="fa fa-user-md fs-1 text-white"></i>
                                     </span>
-                                    <a href="/user/financing_service_index" class="text-white fw-bold fs-6">Kepala Puskesmas</a>
+                                    <a href="/user/kapus" class="text-white fw-bold fs-6">Kepala Puskesmas</a>
                                 </div>
                                 <div class="col-6 d-flex align-items-center">
                                     <h1 class="text-white">
@@ -78,7 +78,7 @@
                                     <span class="svg-icon svg-icon-3x svg-icon-white d-block mt-5 mb-2">
                                         <i class="fas fa-baby fs-1 text-white"></i>
                                     </span>
-                                    <a href="/user/customer_service_index" class="text-white fw-bold fs-6">Balita</a>
+                                    <a href="/data/balita" class="text-white fw-bold fs-6">Balita</a>
                                 </div>
                                 <div class="col-6 d-flex align-items-center">
                                     <h1 class="text-white"></h1>
@@ -91,7 +91,7 @@
                                     <span class="svg-icon svg-icon-3x svg-icon-white d-block mt-5 mb-2">
                                         <i class="fa fa-medkit fs-1 text-white"></i>
                                     </span>
-                                    <a href="/user/marketing_index" class="text-white fw-bold fs-6">Posyandu</a>
+                                    <a href="/data/posyandu" class="text-white fw-bold fs-6">Posyandu</a>
                                 </div>
                                 <div class="col-6 d-flex align-items-center">
                                     <h1 class="text-white"></h1>
