@@ -122,12 +122,12 @@
                             </button>
                             
                             @endif
-                            @if($role == 'ahli_gizi' || $role == 'kapus')
+                            
                             &nbsp;&nbsp;
                             <a class="btn btn-success" href="{{url('data/jadwal/timbang/export')}}">
                                 Export Data Timbang &nbsp;<i class="fa fa-file-excel"></i>
                             </a>
-                            @endif
+                           
                         </div>
                         @endif
                     </div>
