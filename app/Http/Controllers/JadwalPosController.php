@@ -139,16 +139,27 @@ class JadwalPosController extends Controller
         {
             return redirect('data/jadwal/posyandu')->with('error','Tidak dapat menemukan data Pos');
         }
-        $bidan = DB::table('bidan')->get();
-        $userId = Auth::user()->id;
-        $bidan = DB::table('bidan')->where('user_id',$userId)->first();
-        $posyandu = DB::table('posyandu as pd')
+        if(Auth::user()->role == 'bidan')
+        {
+            $userId = Auth::user()->id;
+            $bidanAuth = DB::table('bidan')->where('user_id',$userId)->first();
+            $posyandu = DB::table('posyandu as pd')
+                    ->join('posyandu_bidan as pb','pb.posyandu_id','=','pd.id')
+                    ->where('pb.bidan_id',$bidanAuth->id)
+                    ->select('pd.*')
+                    ->groupBy('pd.id')
+                    ->get();
+            $bidan = DB::table('bidan')->where('user_id',$userId)->get();
+        }else
+        {
+            $bidan = DB::table('bidan')->get();
+            $posyandu = DB::table('posyandu as pd')
                             ->join('posyandu_bidan as pb','pb.posyandu_id','=','pd.id')
-                            ->where('pb.bidan_id',$bidan->id)
+                            ->where('pb.bidan_id',$data->bidan_id)
                             ->select('pd.id','pd.nama_pos')
                             ->groupBy('pb.posyandu_id')
                             ->get();
-        $bidan = DB::table('bidan')->where('user_id',$userId)->get();
+        }
         return view('dashboard.posyandu.jadwal.pos.edit',compact('data','bidan','posyandu'));
     }
     public function update(Request $request,$id)
