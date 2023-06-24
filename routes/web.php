@@ -11,6 +11,7 @@ use App\Http\Controllers\KaderController;
 use App\Http\Controllers\JadwalPosController;
 use App\Http\Controllers\JadwalVitaminController;
 use App\Http\Controllers\DataTimbangController;
+use App\Http\Controllers\SimulatorController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,6 +34,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::prefix('user')->group(function () {
     Route::prefix('ahli_gizi')->group(function () {
         Route::get('/', [AhliGiziController::class, 'index']);
+        Route::get('/export', [AhliGiziController::class, 'exportExcel']);
         Route::get('/create', [AhliGiziController::class, 'create']);
         Route::get('/edit/{id}', [AhliGiziController::class, 'edit']);
         Route::get('/delete/{id}', [AhliGiziController::class, 'delete']);
@@ -43,6 +45,7 @@ Route::prefix('user')->group(function () {
         Route::get('/', [BidanController::class, 'index']);
         Route::get('/posyandu/{id}', [BidanController::class, 'posyandu']);
         Route::get('/create', [BidanController::class, 'create']);
+        Route::get('/export', [BidanController::class, 'exportExcel']);
         Route::get('/edit/{id}', [BidanController::class, 'edit']);
         Route::get('/delete/{id}', [BidanController::class, 'delete']);
         Route::post('/store', [BidanController::class, 'store']);
@@ -51,6 +54,7 @@ Route::prefix('user')->group(function () {
     Route::prefix('kapus')->group(function () {
         Route::get('/', [KapusController::class, 'index']);
         Route::get('/create', [KapusController::class, 'create']);
+        Route::get('/export', [KapusController::class, 'exportExcel']);
         Route::get('/edit/{id}', [KapusController::class, 'edit']);
         Route::get('/delete/{id}', [KapusController::class, 'delete']);
         Route::post('/store', [KapusController::class, 'store']);
@@ -62,6 +66,7 @@ Route::prefix('data')->group(function () {
     Route::prefix('posyandu')->group(function () {
         Route::get('/', [PosyanduController::class, 'index']);
         Route::get('/create', [PosyanduController::class, 'create']);
+        Route::get('/export', [PosyanduController::class, 'exportExcel']);
         Route::get('/edit/{id}', [PosyanduController::class, 'edit']);
         Route::get('/delete/{id}', [PosyanduController::class, 'delete']);
         Route::get('/kader/{id}', [PosyanduController::class, 'kader']);
@@ -70,10 +75,15 @@ Route::prefix('data')->group(function () {
         Route::post('/update/{id}', [PosyanduController::class, 'update']);
     });
 
+    Route::prefix('simulator')->group(function () {
+        Route::get('/', [SimulatorController::class, 'index']);
+    });
+
      Route::prefix('jadwal')->group(function () {
         Route::prefix('posyandu')->group(function () {
             Route::get('/', [JadwalPosController::class, 'index']);
             Route::get('/create', [JadwalPosController::class, 'create']);
+            Route::get('/export', [JadwalPosController::class, 'exportExcel']);
             Route::get('/edit/{id}', [JadwalPosController::class, 'edit']);
             Route::get('/delete/{id}', [JadwalPosController::class, 'delete']);
             Route::post('/store', [JadwalPosController::class, 'store']);
@@ -83,6 +93,7 @@ Route::prefix('data')->group(function () {
         Route::prefix('vitamin')->group(function () {
             Route::get('/', [JadwalVitaminController::class, 'index']);
             Route::get('/create', [JadwalVitaminController::class, 'create']);
+            Route::get('/export', [JadwalVitaminController::class, 'exportExcel']);
             Route::get('/edit/{id}', [JadwalVitaminController::class, 'edit']);
             Route::get('/delete/{id}', [JadwalVitaminController::class, 'delete']);
             Route::post('/store', [JadwalVitaminController::class, 'store']);
@@ -98,6 +109,7 @@ Route::prefix('data')->group(function () {
     Route::prefix('balita')->group(function () {
         Route::get('/', [BalitaController::class, 'index']);
         Route::get('/create', [BalitaController::class, 'create']);
+        Route::get('/export', [BalitaController::class, 'exportExcel']);
         Route::get('/edit/{id}', [BalitaController::class, 'edit']);
         Route::get('/delete/{id}', [BalitaController::class, 'delete']);
         Route::post('/store', [BalitaController::class, 'store']);
@@ -106,6 +118,7 @@ Route::prefix('data')->group(function () {
     Route::prefix('kader')->group(function () {
         Route::get('/', [KaderController::class, 'index']);
         Route::get('/create', [KaderController::class, 'create']);
+        Route::get('/export', [KaderController::class, 'exportExcel']);
         Route::get('/edit/{id}', [KaderController::class, 'edit']);
         Route::get('/delete/{id}', [KaderController::class, 'delete']);
         Route::post('/store', [KaderController::class, 'store']);
