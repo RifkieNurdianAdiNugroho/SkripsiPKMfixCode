@@ -127,47 +127,18 @@
 									 </a>
 								  </div>
 								  
-								 <!--  <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
-									<a  href="{{url('data/hasil')}}">
+								 <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
+									<a  href="{{url('data/simulator')}}">
 									<span class="menu-link">
 										<span class="menu-icon">
 											<span class="svg-icon svg-icon-2">
-												<i class="fa fa-file"></i>
+												<i class="fa fa-calculator"></i>
 											</span>
 										</span>
-											<span class="menu-title">Laporan</span>
+											<span class="menu-title">Simulator</span>
 										</span>
 									 </a>
-								  </div> -->
+								  </div> 
+>
 
-								 <!--  <div class="menu-item">
-									<div class="menu-content pt-8 pb-0">
-										<span class="menu-section text-muted text-uppercase fs-8 ls-1">Laporan</span>
-									</div>
-								 </div> -->
-
-						<!-- 		 <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
-									<a  href="{{url('laporan/user')}}">
-									<span class="menu-link">
-										<span class="menu-icon">
-											<span class="svg-icon svg-icon-2">
-												<i class="fa fa-users"></i>
-											</span>
-										</span>
-											<span class="menu-title">User</span>
-										</span>
-									 </a>
-								  </div>
-
-								  <div data-kt-menu-trigger="click" class="menu-item menu-accordion ">
-									<a  href="{{url('laporan/data')}}">
-									<span class="menu-link">
-										<span class="menu-icon">
-											<span class="svg-icon svg-icon-2">
-												<i class="fa fa-file-excel-o"></i>
-											</span>
-										</span>
-											<span class="menu-title">Data</span>
-										</span>
-									 </a>
-								  </div> -->
+			
