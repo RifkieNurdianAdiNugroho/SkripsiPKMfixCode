@@ -111,7 +111,7 @@
                 </div>
   
                 <div class="d-flex flex-column flex-lg-row-fluid" 
-                     style="background-image: url({{url('admin/image/logo/posyandu.jpg')}}); 
+                     style="background-image: url({{url('admin/image/logo/posyanduu.jpg')}}); 
                             background-repeat: no-repeat, repeat;
                             background-size: cover;">
                   <div class="d-flex flex-column position-xl-fixed top-0 bottom-0 w-xl-600px scroll-y">
