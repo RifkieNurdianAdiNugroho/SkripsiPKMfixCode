@@ -100,7 +100,135 @@
                         </div>
 
                     </div>
-            
+                     <form action="{{url('home')}}">
+                    @if(Auth::user()->role == 'bidan')
+                                    <select class="form-control form-control-solid" name="bidan_id">
+                                        @foreach($data['dataBidan'] as $bidanKey => $bidanIitem)
+                                        <option value="{{$bidanIitem->id}}" 
+                                                {{$request->bidan_id == $bidanIitem->id ? 'selected':''}}>
+                                            {{$bidanIitem->nama}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @else
+                                     <select class="form-control form-control-solid" 
+                                             name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)" required>
+                                        <option value="" selected disabled>
+                                            Pilih Bidan
+                                        </option>
+                                        @foreach($data['dataBidan'] as $bidanKey => $bidanItem)
+                                        <option value="{{$bidanItem->id}}" 
+                                                {{$request->bidan_id == $bidanItem->id ? 'selected':''}}>
+                                            {{$bidanItem->nama}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @endif
+                                    &nbsp;
+                                    @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'kapus')
+                                    <select class="form-control form-control-solid" name="pos_id" id="pos_id" required>
+                                     @if($request->bidan_id != null)
+                                        <option value="" selected disabled>
+                                            Pilih Pos
+                                        </option>
+                                        @foreach($data['posyandu'] as $posyanduKey => $posyanduItem)
+                                        <option value="{{$posyanduItem->id}}" 
+                                                {{$request->pos_id == $posyanduItem->id ? 'selected':''}}>
+                                            {{$posyanduItem->nama_pos}}
+                                        </option>
+                                        @endforeach
+                                        @else
+                                         <option value="" selected disabled>
+                                            <small>(Pos) Pilih Bidan Terlebih Dahulu</small>
+                                        </option>
+                                        @endif
+                                    </select>
+                                    @else
+                                     <select class="form-control form-control-solid" name="pos_id" required>
+                                        <option value="" selected disabled>
+                                            Pilih Pos
+                                        </option>
+                                        @foreach($data['posyandu'] as $posyanduKey => $posyanduItem)
+                                        <option value="{{$posyanduItem->id}}" 
+                                                {{$request->pos_id == $posyanduItem->id ? 'selected':''}}>
+                                            {{$posyanduItem->nama_pos}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @endif
+                                    <br>
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </form>
+                @if($data['balita_l'] > 0 || $data['balita_p'] > 0)
+                <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+                @else
+                <p align="center">Data balita kosong</p>
+                @endif
+                <br>
+                <form action="{{url('home')}}">
+                    @if(Auth::user()->role == 'bidan')
+                                    <select class="form-control form-control-solid" name="gizi_bidan_id">
+                                        @foreach($data['dataBidan'] as $bidanKey => $bidanIitem)
+                                        <option value="{{$bidanIitem->id}}" 
+                                                {{$request->bidan_id == $bidanIitem->id ? 'selected':''}}>
+                                            {{$bidanIitem->nama}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @else
+                                     <select class="form-control form-control-solid" 
+                                             name="gizi_bidan_id" id="gizi_bidan_id" onchange="getPosyandu2(this.value)" required>
+                                        <option value="" selected disabled>
+                                            Pilih Bidan
+                                        </option>
+                                        @foreach($data['dataBidan'] as $bidanKey => $bidanItem)
+                                        <option value="{{$bidanItem->id}}" 
+                                                {{$request->bidan_id == $bidanItem->id ? 'selected':''}}>
+                                            {{$bidanItem->nama}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @endif
+                                    &nbsp;
+                                    @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'kapus')
+                                    <select class="form-control form-control-solid" name="gizi_pos_id" id="gizi_pos_id" required>
+                                     @if($request->bidan_id != null)
+                                        <option value="" selected disabled>
+                                            Pilih Pos
+                                        </option>
+                                        @foreach($data['posyandu'] as $posyanduKey => $posyanduItem)
+                                        <option value="{{$posyanduItem->id}}" 
+                                                {{$request->pos_id == $posyanduItem->id ? 'selected':''}}>
+                                            {{$posyanduItem->nama_pos}}
+                                        </option>
+                                        @endforeach
+                                        @else
+                                         <option value="" selected disabled>
+                                            <small>(Pos) Pilih Bidan Terlebih Dahulu</small>
+                                        </option>
+                                        @endif
+                                    </select>
+                                    @else
+                                     <select class="form-control form-control-solid" name="gizi_pos_id" required>
+                                        <option value="" selected disabled>
+                                            Pilih Pos
+                                        </option>
+                                        @foreach($data['posyandu'] as $posyanduKey => $posyanduItem)
+                                        <option value="{{$posyanduItem->id}}" 
+                                                {{$request->pos_id == $posyanduItem->id ? 'selected':''}}>
+                                            {{$posyanduItem->nama_pos}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @endif
+                                    <br>
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </form>
+                @if($data['gizi_buruk'] > 0 || $data['gizi_kurang'] > 0 || $data['gizi_sedang'] > 0 || $data['gizi_baik'] > 0 || $data['gizi_lebih'] > 0) 
+                <div id="chartContainer1" style="height: 300px; width: 100%;"></div>
+                @else
+                <p align="center">Data status gizi balita kosong</p>
+                @endif
             </div>
             <!--end::Container-->
         </div>
@@ -109,4 +237,130 @@
 @endsection
 @section('scriptcustom')
     <script src="https://use.fontawesome.com/f2fc9ac3b2.js"></script>
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
+    <script>
+window.onload = function() {
+
+var chart = new CanvasJS.Chart("chartContainer", {
+    animationEnabled: true,
+    title: {
+        text: "Data Balita {{$data['dataFilterBalita']}}"
+    },
+    data: [{
+        type: "pie",
+        startAngle: 240,
+        //yValueFormatString: "##0.00\"%\"",
+        indexLabel: "{label} {y}",
+        dataPoints: [
+            {y: '{{$data['balita_l']}}', label: "Laki-Laki"},
+            {y: '{{$data['balita_p']}}', label: "Perempuan"}
+            // {y: 7.06, label: "Baidu"},
+            // {y: 4.91, label: "Yahoo"},
+            // {y: 1.26, label: "Others"}
+        ]
+    }]
+});
+chart.render();
+
+
+var chart1 = new CanvasJS.Chart("chartContainer1", {
+    animationEnabled: true,
+    
+    title:{
+        text:"Data Status Gizi Balita {{$data['dataFilterBalita']}}"
+    },
+    axisX:{
+        interval: 1
+    },
+    axisY2:{
+        interlacedColor: "rgba(1,77,101,.2)",
+        gridColor: "rgba(1,77,101,.1)",
+        title: "Banyak Status Gizi"
+    },
+    data: [{
+        type: "bar",
+        name: "companies",
+        axisYType: "secondary",
+        color: "#014D65",
+        dataPoints: [
+            { y: {{$data['gizi_buruk']}}, label: "Gizi Buruk" },
+            { y: {{$data['gizi_kurang']}}, label: "Gizi Kurang" },
+            { y: {{$data['gizi_sedang']}}, label: "Gizi Sedang" },
+            { y: {{$data['gizi_baik']}}, label: "Gizi Baik" },
+            { y: {{$data['gizi_lebih']}}, label: "Gizi Lebih" }
+        ]
+    }]
+});
+chart1.render();
+}
+
+function getPosyandu(val) {
+        $.ajax({
+                type: 'get',
+                url: "{{url('/user/bidan/posyandu')}}"+"/"+ val,
+                dataType: 'json',
+                success: function (data) {
+                    var temp = [];
+                    $.each(data, function (key, value) {
+                        temp.push({
+                            v: value,
+                            k: key
+                        });
+                    });
+
+                    var x = document.getElementById("pos_id");
+                    $('#pos_id').empty();
+                    var opt_head = document.createElement('option');
+                    opt_head.text = 'Pilih Pos';
+                    opt_head.value = '';
+                    opt_head.disabled = true;
+                    opt_head.selected = true;
+                    x.appendChild(opt_head);
+                    for (var i = 0; i < temp[0].v.length; i++) {
+                        var opt = document.createElement('option');
+                        opt.value = temp[0].v[i].id;
+                        opt.text = temp[0].v[i].nama_pos;
+                        x.appendChild(opt);
+                    }
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+       }
+    function getPosyandu2(val) {
+        $.ajax({
+                type: 'get',
+                url: "{{url('/user/bidan/posyandu')}}"+"/"+ val,
+                dataType: 'json',
+                success: function (data) {
+                    var temp = [];
+                    $.each(data, function (key, value) {
+                        temp.push({
+                            v: value,
+                            k: key
+                        });
+                    });
+
+                    var x = document.getElementById("gizi_pos_id");
+                    $('#gizi_pos_id').empty();
+                    var opt_head = document.createElement('option');
+                    opt_head.text = 'Pilih Pos';
+                    opt_head.value = '';
+                    opt_head.disabled = true;
+                    opt_head.selected = true;
+                    x.appendChild(opt_head);
+                    for (var i = 0; i < temp[0].v.length; i++) {
+                        var opt = document.createElement('option');
+                        opt.value = temp[0].v[i].id;
+                        opt.text = temp[0].v[i].nama_pos;
+                        x.appendChild(opt);
+                    }
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+       }
+</script>
 @endsection

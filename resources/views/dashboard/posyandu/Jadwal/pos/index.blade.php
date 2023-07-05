@@ -29,9 +29,7 @@
                         <form action="{{url('data/jadwal/posyandu')}}">
                             <div class="card-title">
                                 <div class="d-flex align-items-center position-relative my-1" align="right">
-                                     <input type="month" name="tanggal" class="form-control form-control-solid " 
-                                           placeholder="Cari nama balita" value="{{$request->tanggal}}" />
-                                    &nbsp;
+                                     
                                     @if(Auth::user()->role == 'bidan')
                                     <select class="form-control form-control-solid" name="bidan_id" required>
                                         @foreach($bidan as $bidanKey => $bidanIitem)
@@ -87,6 +85,9 @@
                                         @endforeach
                                     </select>
                                     @endif
+                                    &nbsp;
+                                    <input type="month" name="tanggal" class="form-control form-control-solid " 
+                                           placeholder="Cari nama balita" value="{{$request->tanggal}}" />
                                     &nbsp;
                                     <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                                 </div>

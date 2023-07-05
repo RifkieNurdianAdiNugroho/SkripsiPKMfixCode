@@ -29,25 +29,6 @@
                         <form action="{{url('data/balita')}}">
                             <div class="card-title">
                                 <div class="d-flex align-items-center position-relative my-1" align="right">
-                                     <input type="text" name="balita" class="form-control form-control-solid " 
-                                           placeholder="Cari nama balita" value="{{$request->balita}}" />
-                                    &nbsp;
-                                    <input type="text" name="ortu" class="form-control form-control-solid " 
-                                           placeholder="Cari nama ortu" value="{{$request->ortu}}"/>
-                                    &nbsp;
-                                    <select class="form-control form-control-solid" 
-                                            name="jenis_kelamin" id="jenis_kelamin" >
-                                        <option value="" selected disabled>
-                                            Pilih Kelamin
-                                        </option>
-                                        <option value="L" {{$request->jenis_kelamin == 'L' ? 'selected':''}}>
-                                            L
-                                        </option>
-                                        <option value="P" {{$request->jenis_kelamin == 'P' ? 'selected':''}}>
-                                            P
-                                        </option>
-                                    </select>
-                                    &nbsp;
                                     @if(Auth::user()->role == 'bidan')
                                     <select class="form-control form-control-solid" name="bidan_id">
                                         @foreach($bidan as $bidanKey => $bidanIitem)
@@ -104,6 +85,27 @@
                                     </select>
                                     @endif
                                     &nbsp;
+                                    <select class="form-control form-control-solid" 
+                                            name="jenis_kelamin" id="jenis_kelamin" >
+                                        <option value="" selected disabled>
+                                            Pilih Kelamin
+                                        </option>
+                                        <option value="L" {{$request->jenis_kelamin == 'L' ? 'selected':''}}>
+                                            L
+                                        </option>
+                                        <option value="P" {{$request->jenis_kelamin == 'P' ? 'selected':''}}>
+                                            P
+                                        </option>
+                                    </select>
+
+                                    &nbsp;
+                                     <input type="text" name="balita" class="form-control form-control-solid " 
+                                           placeholder="Cari nama balita" value="{{$request->balita}}" />
+                                    &nbsp;
+                                    <input type="text" name="ortu" class="form-control form-control-solid " 
+                                           placeholder="Cari nama ortu" value="{{$request->ortu}}"/>
+                                    &nbsp;
+                                    
                                     <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                                 </div>
                             </div>

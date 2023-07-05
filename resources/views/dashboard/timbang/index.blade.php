@@ -31,25 +31,6 @@
                     <form action="{{url('data/jadwal/timbang')}}">
                         <div class="card-title">
                             <div class="d-flex align-items-center position-relative my-1">
-                                <input type="text" name="balita" class="form-control form-control-solid " 
-                                       placeholder="Cari nama balita" value="{{$request->balita}}" />
-                                &nbsp;
-                                <input type="text" name="ortu" class="form-control form-control-solid " 
-                                       placeholder="Cari nama ortu" value="{{$request->ortu}}"/>
-                                &nbsp;
-                                <select class="form-control form-control-solid" 
-                                        name="jenis_kelamin" id="jenis_kelamin" >
-                                    <option value="" selected disabled>
-                                        Pilih Kelamin
-                                    </option>
-                                    <option value="L" {{$request->jenis_kelamin == 'L' ? 'selected':''}}>
-                                        L
-                                    </option>
-                                    <option value="P" {{$request->jenis_kelamin == 'P' ? 'selected':''}}>
-                                        P
-                                    </option>
-                                </select>
-                                &nbsp;
                                 @if($role != 'bidan')
                                 <select class="form-control form-control-solid" 
                                         name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)" required>
@@ -96,6 +77,28 @@
                                     @endforeach
                                 </select>
                                 @endif
+                                &nbsp;
+
+                                
+                                <select class="form-control form-control-solid" 
+                                        name="jenis_kelamin" id="jenis_kelamin" >
+                                    <option value="" selected disabled>
+                                        Pilih Kelamin
+                                    </option>
+                                    <option value="L" {{$request->jenis_kelamin == 'L' ? 'selected':''}}>
+                                        L
+                                    </option>
+                                    <option value="P" {{$request->jenis_kelamin == 'P' ? 'selected':''}}>
+                                        P
+                                    </option>
+                                </select>
+                                &nbsp;
+                                
+                                <input type="text" name="balita" class="form-control form-control-solid " 
+                                       placeholder="Cari nama balita" value="{{$request->balita}}" />
+                                &nbsp;
+                                <input type="text" name="ortu" class="form-control form-control-solid " 
+                                       placeholder="Cari nama ortu" value="{{$request->ortu}}"/>
                                 &nbsp;
                                 <input type="month" name="start_month" value="{{$request->start_month}}" class="form-control form-control-solid" />
                                 &nbsp;

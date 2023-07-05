@@ -224,9 +224,65 @@
                     <div class="card-body py-4">
                     <h2 align="center">Hasil Perhitungan</h2>
                     @if(count($data) > 0)
+                    <div class="row">
+                        <div class="col-md-12">
+                                <p align="center">Menentukan Range Alternatif dan Kriteria</p>
+                                
+                                <div class="table-responsive">
+                                    <table class="table align-middle table-row-dashed fs-6 gy-5">
+                                        <thead>
+                                            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-125px">Type</th>
+                                                <th class="min-w-125px">Range</th>
+                                                <th class="min-w-125px">Bobot</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           <tr>
+                                               <td>
+                                                   C1
+                                               </td>
+                                               <td>
+                                                   {{str_replace('|',' sd ',$data['imp_c1'])}}
+                                               </td>
+                                               <td>
+                                                   {{$data[0]}}
+                                               </td>
+                                           </tr>
+                                           <tr>
+                                               <td>
+                                                   C2
+                                               </td>
+                                               <td>
+                                                   {{str_replace('|',' sd ',$data['imp_c2'])}}
+                                               </td>
+                                               <td>
+                                                   {{$data[1]}}
+                                               </td>
+                                           </tr>
+                                           <tr>
+                                               <td>
+                                                   C3
+                                               </td>
+                                               <td>
+                                                   {{str_replace('|',' sd ',$data['imp_c3'])}}
+                                               </td>
+                                               <td>
+                                                   {{$data[2]}}
+                                               </td>
+                                           </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <p align="center">
+                                    TB & BB di golongkan secara sistem dengan data Kategori dan Ambang Batas serta Standar Antropometri Status Gizi Anak yang dapat dilihat di file ini 
+                                    <a data-bs-toggle="modal" data-bs-target="#myModal" style="cursor: pointer;"><b> Klik Disini</b></a> Dihalaman 14 - 42 Berdasarkan Umur dan Jenis Kelamin Anak
+                                </p>
+                            </div>
+                    </div>
                         <div class="row">
                             <div class="col-md-4">
-                                <p align="center">Hasil Bobot Kriteria</p>
+                                <p align="center">Matriks Normalisasi</p>
                                 
                                 <div class="table-responsive">
                                     <table class="table align-middle table-row-dashed fs-6 gy-5">
@@ -252,10 +308,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <p align="center">
-                                    TB & BB di golongkan secara sistem dengan data Kategori dan Ambang Batas serta Standar Antropometri Status Gizi Anak yang dapat dilihat di file ini 
-                                    <a data-bs-toggle="modal" data-bs-target="#myModal" style="cursor: pointer;"><b> Klik Disini</b></a> Dihalaman 14 - 42 Berdasarkan Umur dan Jenis Kelamin Anak
-                                </p>
+                               
                             </div>
                             <div class="col-md-4">
                                 <p align="center">Benefit SAW</p>
@@ -264,9 +317,9 @@
                                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                                         <thead>
                                             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-125px">C1</th>
-                                                <th class="min-w-125px">C2</th>
-                                                <th class="min-w-125px">C3</th>
+                                                <th class="min-w-125px">V1</th>
+                                                <th class="min-w-125px">V2</th>
+                                                <th class="min-w-125px">V3</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -278,7 +331,7 @@
                                                    {{$data['c2']}}
                                                </td>
                                                <td style="background-color: blue;color: white;text-align: center;">
-                                                   {{$data['c2']}}
+                                                   {{$data['c3']}}
                                                </td>
                                            </tr>
                                         </tbody>
@@ -295,7 +348,7 @@
                                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                                         <thead>
                                             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-125px">Data</th>
+                                                <th class="min-w-125px">Ranking SAW Benefit</th>
                                                 <th class="min-w-125px">Ket</th>
                                             </tr>
                                         </thead>
