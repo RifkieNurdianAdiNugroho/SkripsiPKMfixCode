@@ -53,18 +53,40 @@ class SimulatorController extends Controller
                     {
                         //c1
                         $ceSatu = $this->getBobot($jenis_kelamin,$umur,$tb,null,'standart_tb_umur_laki_laki','tb_char','tb/u','data');
-                        //dd($ceSatu);
                         $ceSatu = $this->normalizeKategori($ceSatu); //30
-                        $data[0] = $ceSatu;
+                        $data[0] = $ceSatu['bobot'];
+
+                        if($ceSatu['bobot'] <= 0)
+                        {
+                            $data['imp_c1'] = '>+3SD';
+                        }else
+                        {
+                            $data['imp_c1'] = $ceSatu['imp'];
+                        }
                         //c2
                         $ceDua = $this->getBobot($jenis_kelamin,$umur,$bb,null,'standart_bb_umur_laki_laki','bb_char','bb/u','data');
-                        // dd($ceDua);
                         $ceDua = $this->normalizeKategori($ceDua); //40
-                        $data[1] = $ceDua;
+                        $data[1] = $ceDua['bobot'];
+                        
+                        if($ceDua['bobot'] <= 0)
+                        {
+                           $data['imp_c2'] = '>+3SD';
+                        }else
+                        {
+                           $data['imp_c2'] = $ceDua['imp'];
+                        }
                         //c3
                         $ceTiga = $this->getBobot($jenis_kelamin,$umur,$tb,$bb,'standart_bb_tb_laki_laki','tb_bb_char','bb/tb','data');
                         $ceTiga = $this->normalizeKategori($ceTiga); //30
-                        $data[2] = $ceTiga;
+                        $data[2] = $ceTiga['bobot'];
+                        
+                        if($ceTiga['bobot'] <= 0)
+                        {
+                           $data['imp_c3'] = '>+3SD';
+                        }else
+                        {
+                           $data['imp_c3'] = $ceTiga['imp'];
+                        }
                     }
                }else
                {
@@ -73,22 +95,46 @@ class SimulatorController extends Controller
                         //c1
                         $ceSatu = $this->getBobot($jenis_kelamin,$umur,$tb,null,'standart_tb_umur_perempuan','tb_char','tb/u','data');
                         $ceSatu = $this->normalizeKategori($ceSatu); //30
-                        $data[0] = $ceSatu;
+                        $data[0] = $ceSatu['bobot'];
+                        if($ceSatu['bobot'] <= 0)
+                        {
+                            $data['imp_c1'] = '>+3SD';
+                        }else
+                        {
+                            $data['imp_c1'] = $ceSatu['imp'];
+                        }
                         //c2
                         $ceDua = $this->getBobot($jenis_kelamin,$umur,$bb,null,'standart_bb_umur_perempuan','bb_char','bb/u','data');
                         $ceDua = $this->normalizeKategori($ceDua); //40
-                        $data[1] = $ceDua;
+                        $data[1] = $ceDua['bobot'];
+
+                        if($ceDua['bobot'] <= 0)
+                        {
+                           $data['imp_c2'] = '>+3SD';
+                        }else
+                        {
+                           $data['imp_c2'] = $ceDua['imp'];
+                        }
                         //c3
                         $ceTiga = $this->getBobot($jenis_kelamin,$umur,$tb,$bb,'standart_bb_tb_perempuan','tb_bb_char','bb/tb','data');
                         $ceTiga = $this->normalizeKategori($ceTiga); //30
-                        $data[2] = $ceTiga;
+                        $data[2] = $ceTiga['bobot'];
+
+                        if($ceTiga['bobot'] <= 0)
+                        {
+                           $data['imp_c3'] = '>+3SD';
+                        }else
+                        {
+                           $data['imp_c3'] = $ceTiga['imp'];
+                        }
                     }
                }
-
+              // dd($data);
                if($tb != null && $bb != null)
                {
                 //benefit
-                   $max = max($data);
+                   $maxNya = [$data[0],$data[1],$data[2]];
+                   $max = max($maxNya);
                    $c1 = $data[0] / $max;
                    $c2 = $data[1] / $max;
                    $c3 = $data[2] / $max;
@@ -116,19 +162,39 @@ class SimulatorController extends Controller
                {
                   $data['status'] = 'Gizi Baik';
                 }else{
-                   $c1 = $c1 * 50;
-                   $c2 = $c2 * 50;
-                   $c3 = $c3 * 50;
+                   
+                   if($data[0] <= 0)
+                   {
+                        $data[0] = 0.75;
+                   }
+                   if($data[1] <= 0)
+                   {
+                        $data[1] = 0.75;
+                   }
+                   if($data[2] <= 0)
+                   {
+                        $data[2] = 0.75;
+                   }
+
+                   $krg = $hasil - 120;
+                   $krg = abs($krg);
+                   $bulat = round($krg / 3);
+                   $hasil = $hasil + $krg;
+
+                   $maxNya = [$data[0],$data[1],$data[2]];
+                   $max = max($maxNya);
+                   $c1 = $data[0] / $max * 30 + $bulat;
+                   $c2 = $data[1] / $max * 40 + $bulat;
+                   $c3 = $data[2] / $max * 30 + $bulat;
+                   
                    $hasil =  $c1 + $c2 + $c3;
                    $data['c1']  = $c1;
                    $data['c2'] = $c2;
                    $data['c3'] = $c3;
+                   
                    $data['saw'] = $hasil;
-                  $data['status'] = 'Gizi Lebih';
+                   $data['status'] = 'Gizi Lebih';
                }
-            //}
-        //}
-        //dd($data);
         return $data;
     }
 
@@ -177,8 +243,8 @@ class SimulatorController extends Controller
 
     public function normalizeKategori($arr)
     {
-        //dd($arr);
         $imp = implode('|', $arr['result']);
+        $arr['imp'] = $imp;
         $imp = str_replace(' SD', '', $imp);
         $data = DB::table('kategori_status_gizi')->where('type',$arr['type'])->where('z_score',$imp)->first();
         $result = [];
@@ -186,19 +252,18 @@ class SimulatorController extends Controller
         $plod = [];
         if($data)
         {
-          $arr['data'] = $data;
+          //$arr['data'] = $data;
           $bobot = $data->bobot;
         }else
         {
          $data = DB::table('kategori_status_gizi')->where('type',$arr['type'])->where('z_score', 'like', '%' .$imp. '%')->first();
          if($data)
          {
-            $arr['data'] = $data;
+           // $arr['data'] = $data;
             $bobot = $data->bobot;
          }
         }
-
-        $arr['imp'] = $imp;
-        return $bobot;
+        $arr['bobot'] = $bobot;
+        return $arr;
     }
 }
