@@ -311,7 +311,7 @@
                                
                             </div>
                             <div class="col-md-4">
-                                <p align="center">Benefit SAW</p>
+                                <p align="center">Hasil matriks Normalisasi</p>
                                
                                 <div class="table-responsive">
                                     <table class="table align-middle table-row-dashed fs-6 gy-5">
@@ -325,13 +325,13 @@
                                         <tbody>
                                            <tr>
                                                <td style="background-color: red;color: white;text-align: center;">
-                                                   {{$data['c1']}}
+                                                   {{round($data['c1'])}}
                                                </td>
                                                <td style="background-color: yellow;color: black;text-align: center;">
-                                                   {{$data['c2']}}
+                                                   {{round($data['c2'])}}
                                                </td>
                                                <td style="background-color: blue;color: white;text-align: center;">
-                                                   {{$data['c3']}}
+                                                   {{round($data['c3'])}}
                                                </td>
                                            </tr>
                                         </tbody>
@@ -342,20 +342,20 @@
                                 </p>
                             </div>
                             <div class="col-md-4">
-                                <p align="center">Perankingan Data Benefit Gizi SAW</p>
+                                <p align="center">Perangkingan Setiap Alternatif</p>
                                 
                                 <div class="table-responsive">
                                     <table class="table align-middle table-row-dashed fs-6 gy-5">
                                         <thead>
                                             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-125px">Ranking SAW Benefit</th>
+                                                <th class="min-w-125px">Hasil Kalkulasi Status Gizi</th>
                                                 <th class="min-w-125px">Ket</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td style="background-color: blue;color: white;text-align: center;">
-                                                    {{$data['saw']}}
+                                                    {{round($data['saw'])}}
                                                 </td>
                                                 <td style="background-color: green;color: white;">
                                                     {{$data['status']}}
@@ -364,7 +364,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <p align="center">Table Benefit SAW dijumlah CI+C2+C3</p>
+                                <p align="center">Table Benefit SAW dijumlah VI+V2+V3</p>
                             </div>
                         </div>
                     @else

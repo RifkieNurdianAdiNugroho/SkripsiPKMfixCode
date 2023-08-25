@@ -75,8 +75,9 @@
                                     <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
                                         title="Email aktif"></i>
                                 </label>
-                                <input type="email" onblur="validateEmail(this);" required class="form-control form-control-solid"
-                                    name="email"  placeholder="Cth : sari@gmail.com" value="{{$data->email}}"/>
+                                <input type="text" onblur="validateEmail(this);" required class="form-control form-control-solid"
+                                    name="email_aktif"  placeholder="Cth : sari@gmail.com" value="{{$data->email}}" 
+                                    {{Auth::user()->email == $data->email ? 'readonly':''}}/>
                             </div>
                             <div class="mb-10 fv-row" data-kt-password-meter="true">
                                 <div class="mb-1">

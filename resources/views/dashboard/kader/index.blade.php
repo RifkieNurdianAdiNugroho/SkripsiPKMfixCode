@@ -29,10 +29,6 @@
                         <form action="{{url('data/kader')}}">
                     <div class="card-title">
                        <div class="d-flex align-items-center position-relative my-1" align="right">
-                             <input type="text" name="kader" class="form-control form-control-solid " 
-                                   placeholder="Cari nama kader" value="{{$request->kader}}" />
-                            &nbsp;
-                           
                              <select class="form-control form-control-solid" 
                                      name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)">
                                 @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'kapus')
@@ -76,6 +72,9 @@
                                         @endforeach
                                     </select>
                             @endif
+                            &nbsp;
+                             <input type="text" name="kader" class="form-control form-control-solid " 
+                                   placeholder="Cari nama kader" value="{{$request->kader}}" />
                             &nbsp;
                             <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
                        
@@ -123,7 +122,9 @@
                                     <th class="min-w-125px">No Telepon</th>
                                     <th class="min-w-125px">Alamat</th>
                                     <th class="min-w-125px">Pos</th>
+                                    @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'bidan')
                                     <th class="text-end min-w-100px">Actions</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody class="text-gray-600 fw-bold">

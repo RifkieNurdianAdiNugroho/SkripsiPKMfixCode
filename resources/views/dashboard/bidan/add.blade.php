@@ -27,7 +27,7 @@
                 <div class="card">
                     <div class="card-body py-4">
 
-                        <form class="form" action="{{ url('user/bidan/store') }}" method="post" enctype="multipart/form-data">
+                        <form  autocomplete="off" class="form" action="{{ url('user/bidan/store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                             <div class="fv-row mb-7">
                                 <label class="fs-6 fw-bold form-label mt-3">
@@ -84,8 +84,8 @@
                                     <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
                                         title="Email aktif"></i>
                                 </label>
-                                <input type="email" onblur="validateEmail(this);" required class="form-control form-control-solid"
-                                    name="email" value="" placeholder="Cth : sari@gmail.com"/>
+                                <input type="text" onblur="validateEmail(this);" required class="form-control form-control-solid"
+                                    name="email_aktif" id="email_aktif" autocomplete="chrome-off" placeholder="Cth : sari@gmail.com"/>
                             </div>
                             <div class="mb-10 fv-row" data-kt-password-meter="true">
                                 <div class="mb-1">
@@ -96,7 +96,7 @@
                                     </label>
                                     <div class="position-relative mb-3">
                                         <input class="form-control form-control-lg form-control-solid" type="password"
-                                            placeholder="******" name="password" autocomplete="off" />
+                                            placeholder="******" id="password_aktif" name="password" autocomplete="new-password" />
                                         <span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
                                             data-kt-password-meter-control="visibility">
                                             <i class="bi bi-eye-slash fs-2"></i>
@@ -137,9 +137,15 @@
             } else {
                 $("#btn_sbmt").show();
             }
-
             return true;
-
         }
+
+        function replaceValue(id) 
+        {
+            $('#'+id).val('');
+        }
+        // window.onload = function() {
+        //   replaceValue('email_aktif');
+        // };
     </script>
 @endsection

@@ -49,17 +49,17 @@ class BidanController extends Controller
 
     public function store(Request $request)
     {
-        $check = DB::table('users')->where('email',$request->email)->first();
+        $check = DB::table('users')->where('email',$request->email_aktif)->first();
         if($check)
         {
-            return redirect('user/bidan/store')
-                ->with('error','Gagal menambahakan data Bidan email '.$request->email.' sudah terpakai mohon gunakan email yang lain');
+            return redirect('user/bidan')
+                ->with('error','Gagal menambahakan data Bidan email '.$request->email_aktif.' sudah terpakai mohon gunakan email yang lain');
         }
 
         $createdAt = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
         $userId = DB::table('users')->insertGetId([
             'role'=>'bidan',
-            'email'=>$request->email,
+            'email'=>$request->email_aktif,
             'password'=>bcrypt($request->password),
             'created_at'=>$createdAt,
         ]);
@@ -92,13 +92,13 @@ class BidanController extends Controller
 
     public function update(Request $request,$id)
     {
-       $check = DB::table('users')->where('email',$request->email)->first();
+       $check = DB::table('users')->where('email',$request->email_aktif)->first();
        if($check)
        {
             if($check->id != $request->user_id)
             {
                 return redirect('user/bidan/edit/'.$id)
-                ->with('error','Gagal mengubah data Bidan email '.$request->email.' sudah terpakai mohon gunakan email yang lain');
+                ->with('error','Gagal mengubah data Bidan email '.$request->email_aktif.' sudah terpakai mohon gunakan email yang lain');
             }
        }
 
@@ -108,14 +108,14 @@ class BidanController extends Controller
        {
             DB::table('users')->where('id',$request->user_id)->update([
                 'role'=>'bidan',
-                'email'=>$request->email,
+                'email'=>$request->email_aktif,
                 'password'=>bcrypt($request->password),
                 'updated_at'=>$createdAt,
             ]);
        }else{
             DB::table('users')->where('id',$request->user_id)->update([
                 'role'=>'bidan',
-                'email'=>$request->email,
+                'email'=>$request->email_aktif,
                 'updated_at'=>$createdAt,
             ]);
        }

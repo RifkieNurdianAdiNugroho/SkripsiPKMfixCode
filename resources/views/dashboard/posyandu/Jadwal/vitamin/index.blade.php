@@ -14,46 +14,92 @@
                         <li class="breadcrumb-item">
                             <span class="bullet bg-gray-300 w-5px h-2px"></span>
                         </li>
-                        <li class="breadcrumb-item text-muted">List</li>
+                        <li class="breadcrumb-item text-muted">Jadwal</li>
                         <li class="breadcrumb-item">
                             <span class="bullet bg-gray-300 w-5px h-2px"></span>
                         </li>
-                        <li class="breadcrumb-item text-muted">Posyandu</li>
+                        <li class="breadcrumb-item text-muted">Vitamin</li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="post d-flex flex-column-fluid" id="kt_post">
             <div id="kt_content_container" class="container-xxl">
+                <div class="card-header border-0 pt-6">
+                        <form action="{{url('data/jadwal/vitamin')}}">
+                            <div class="card-title">
+                                <div class="d-flex align-items-center position-relative my-1" align="right">
+                                    
+                                    @if(Auth::user()->role == 'bidan')
+                                    <select class="form-control form-control-solid" name="bidan_id" required>
+                                        @foreach($bidan as $bidanKey => $bidanIitem)
+                                        <option value="{{$bidanIitem->id}}" 
+                                                {{$request->bidan_id == $bidanIitem->id ? 'selected':''}}>
+                                            {{$bidanIitem->nama}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @else
+                                     <select class="form-control form-control-solid" 
+                                             name="bidan_id" id="bidan_id" onchange="getPosyandu(this.value)" required>
+                                        <option value="" selected disabled>
+                                            Pilih Bidan
+                                        </option>
+                                        @foreach($bidan as $bidanKey => $bidanItem)
+                                        <option value="{{$bidanItem->id}}" 
+                                                {{$request->bidan_id == $bidanItem->id ? 'selected':''}}>
+                                            {{$bidanItem->nama}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @endif
+                                    &nbsp;
+                                    @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'kapus')
+                                    <select class="form-control form-control-solid" name="pos_id" id="pos_id">
+                                     @if($request->bidan_id != null)
+                                        <option value="" selected disabled>
+                                            Pilih Pos
+                                        </option>
+                                        @foreach($posyandu as $posyanduKey => $posyanduItem)
+                                        <option value="{{$posyanduItem->id}}" 
+                                                {{$request->pos_id == $posyanduItem->id ? 'selected':''}}>
+                                            {{$posyanduItem->nama_pos}}
+                                        </option>
+                                        @endforeach
+                                        @else
+                                         <option value="" selected disabled>
+                                            <small>(Pos) Pilih Bidan Terlebih Dahulu</small>
+                                        </option>
+                                        @endif
+                                    </select>
+                                    @else
+                                     <select class="form-control form-control-solid" name="pos_id">
+                                        <option value="" selected disabled>
+                                            Pilih Pos
+                                        </option>
+                                        @foreach($posyandu as $posyanduKey => $posyanduItem)
+                                        <option value="{{$posyanduItem->id}}" 
+                                                {{$request->pos_id == $posyanduItem->id ? 'selected':''}}>
+                                            {{$posyanduItem->nama_pos}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @endif
+                                    &nbsp;
+                                     <input type="month" name="tanggal" class="form-control form-control-solid " 
+                                           placeholder="Cari nama balita" value="{{$request->tanggal}}" />
+                                    &nbsp;
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 <div class="card">
                     <div class="card-header border-0 pt-6">
-                        <div class="card-title">
-                            <div class="d-flex align-items-center position-relative my-1">
-                                <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none">
-                                        <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2"
-                                            rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-                                        <path
-                                            d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                            fill="black" />
-                                    </svg>
-                                </span>
-                                <input type="text" data-kt-user-table-filter="search"
-                                    class="form-control form-control-solid w-250px ps-14" placeholder="Cari Nama Pos" />
-                            </div>
-                        </div>
-                        @if(Auth::user()->role == 'kapus')
-                         <div align="right">
-                            <a class="btn btn-success" href="{{url('data/posyandu/export')}}">
-                                Export Data Posyandu &nbsp;<i class="fa fa-file-excel"></i>
-                            </a>    
-                        </div>
-                        @endif
-                        @if(Auth::user()->role == 'ahli_gizi')
+                        @if(Auth::user()->role == 'bidan')
                         <div class="card-toolbar">
                             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-                                <a href="{{ url('/data/posyandu/create') }}" class="btn btn-primary">
+                                <a href="{{ url('/data/jadwal/vitamin/create') }}" class="btn btn-primary">
                                     <span class="svg-icon svg-icon-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 24 24" fill="none">
@@ -69,39 +115,39 @@
                         </div>
                         @endif
                     </div>
+                    @if(Auth::user()->role == 'kapus')
+                    @if(count($request->all()) > 0)
+                    <div align="right">
+                        <a class="btn btn-success" href="{{url('data/jadwal/vitamin/export')}}">
+                                Export Data Jadwal Vitamin &nbsp;<i class="fa fa-file-excel"></i>
+                        </a>
+                    </div>
+                    @endif
+                    @endif
                     <div class="card-body py-4">
                         <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_crm_table">
                             <thead>
                                 <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                                     <th class="w-10px pe-2">No</th>
-                                    <th class="min-w-125px">Naman</th>
-                                    <th class="min-w-125px">Desa</th>
-                                    <th class="min-w-125px">Alamat</th>
+                                    <th class="min-w-125px">Naman Pos</th>
                                     <th class="min-w-125px">Bidan</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                    <th class="min-w-125px">Vitamin</th>
+                                    @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'bidan')
                                     <th class="text-end min-w-100px">Actions</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody class="text-gray-600 fw-bold">
                                 @foreach ($data as $key => $item)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $item->nama_pos }}</td>
-                                        <td>{{ $item->desa }}</td>
-                                        <td><small>{{$item->alamat}}</small></td>
-                                        <td>
-                                            @if(isset($bidanPos[$key]))
-                                            <ul>
-                                                @foreach($bidanPos[$key] as $bidanKey => $bidanItem)
-                                                <li>
-                                                    {{$bidanItem['nama']}}
-                                                </li>
-                                                @endforeach
-                                            </ul>
-                                            @else
-                                            -
-                                            @endif
-                                        </td>
+                                        <td>{{ $item->posyandu_name }}</td>
+                                        <td>{{ $item->bidan_name }}</td>
+                                        <td>{{ $item->tanggal }}</td>
+                                        <td>{{ $item->vitamin }}</td>
                                         <td class="text-end">
+                                            @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'bidan')
                                             <a href="#" class="btn btn-light btn-active-light-primary btn-sm"
                                                 data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
                                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
@@ -117,18 +163,18 @@
                                             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
                                                 data-kt-menu="true">
                                                 <div class="menu-item px-3">
-                                                    <a href="{{ url('data/posyandu/edit/' . $item->id) }}"
+                                                    <a href="{{ url('data/jadwal/vitamin/edit/' . $item->id) }}"
                                                         class="menu-link px-3"
                                                         data-kt-users-table-filter="edit_row">Edit</a>
                                                 </div>
                                                 <div class="menu-item px-3">
-                                                    <a href="{{ url('data/posyandu/delete/' . $item->id) }}"
+                                                    <a href="{{ url('data/jadwal/vitamin/delete/' . $item->id) }}"
                                                         onclick="return confirm('apakah anda yakin ingin menghapus data ini ?')"
                                                         class="menu-link px-3"
                                                         data-kt-users-table-filter="delete_row">Delete</a>
                                                 </div>
-                                                
                                             </div>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -221,5 +267,40 @@
         KTUtil.onDOMContentLoaded(function() {
             crmList.init();
         });
+
+        function getPosyandu(val) {
+        $.ajax({
+                type: 'get',
+                url: "{{url('/user/bidan/posyandu')}}"+"/"+ val,
+                dataType: 'json',
+                success: function (data) {
+                    var temp = [];
+                    $.each(data, function (key, value) {
+                        temp.push({
+                            v: value,
+                            k: key
+                        });
+                    });
+
+                    var x = document.getElementById("pos_id");
+                    $('#pos_id').empty();
+                    var opt_head = document.createElement('option');
+                    opt_head.text = 'Pilih Pos';
+                    opt_head.value = '0';
+                    opt_head.disabled = true;
+                    opt_head.selected = true;
+                    x.appendChild(opt_head);
+                    for (var i = 0; i < temp[0].v.length; i++) {
+                        var opt = document.createElement('option');
+                        opt.value = temp[0].v[i].id;
+                        opt.text = temp[0].v[i].nama_pos;
+                        x.appendChild(opt);
+                    }
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+       }
     </script>
 @endsection

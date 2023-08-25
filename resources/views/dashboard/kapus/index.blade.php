@@ -79,7 +79,9 @@
                                     <th class="min-w-125px">Jabatan</th>
                                     <th class="min-w-125px">No Telepon</th>
                                     <th class="min-w-125px">Alamat</th>
+                                    @if(Auth::user()->role == 'ahli_gizi')
                                     <th class="text-end min-w-100px">Actions</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody class="text-gray-600 fw-bold">

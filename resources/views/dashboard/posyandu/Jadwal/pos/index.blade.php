@@ -132,7 +132,9 @@
                                     <th class="min-w-125px">Naman Pos</th>
                                     <th class="min-w-125px">Bidan</th>
                                     <th class="min-w-125px">Tanggal</th>
+                                    @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'bidan')
                                     <th class="text-end min-w-100px">Actions</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody class="text-gray-600 fw-bold">

@@ -127,17 +127,25 @@ class SimulatorController extends Controller
                         {
                            $data['imp_c3'] = $ceTiga['imp'];
                         }
+                        
                     }
                }
-              // dd($data);
+              //dd($data);
                if($tb != null && $bb != null)
                {
                 //benefit
                    $maxNya = [$data[0],$data[1],$data[2]];
                    $max = max($maxNya);
-                   $c1 = $data[0] / $max;
-                   $c2 = $data[1] / $max;
-                   $c3 = $data[2] / $max;
+                   if($max > 0)
+                   {
+                        $c1 = $data[0] / $max;
+                        $c2 = $data[1] / $max;
+                        $c3 = $data[2] / $max;
+                   }else{
+                        $c1 = 0;
+                        $c2 = 0;
+                        $c3 = 0;
+                   }
                    //kali
                    $c1 = $c1 * 30;
                    $c2 = $c2 * 40;
@@ -176,7 +184,7 @@ class SimulatorController extends Controller
                         $data[2] = 0.75;
                    }
 
-                   $krg = $hasil - 120;
+                   $krg = $hasil - 60;
                    $krg = abs($krg);
                    $bulat = round($krg / 3);
                    $hasil = $hasil + $krg;
@@ -191,10 +199,28 @@ class SimulatorController extends Controller
                    $data['c1']  = $c1;
                    $data['c2'] = $c2;
                    $data['c3'] = $c3;
-                   
                    $data['saw'] = $hasil;
-                   $data['status'] = 'Gizi Lebih';
+                   if ($data['saw'] < 60)
+                   {
+                        $data['status'] = 'Gizi Buruk';
+                   }elseif ($data['saw'] <= 69.9 )
+                   {
+                        $data['status'] = 'Gizi Kurang';
+                   }elseif ($data['saw'] <= 79.9)
+                   {
+                        $data['status'] = 'Gizi Sedang';
+                   }elseif ($data['saw'] <= 100)
+                   {
+                        $data['status'] = 'Gizi Baik';
+                   }else
+                   {
+                        $data['status'] = 'Gizi Lebih';
+                   }
+                   
+
+                   //dd($data);
                }
+              // dd($data);
         return $data;
     }
 
@@ -245,6 +271,11 @@ class SimulatorController extends Controller
     {
         $imp = implode('|', $arr['result']);
         $arr['imp'] = $imp;
+        if($imp == null)
+        {
+            $arr['imp'] = '-3SD';
+        }
+        //dd($arr);
         $imp = str_replace(' SD', '', $imp);
         $data = DB::table('kategori_status_gizi')->where('type',$arr['type'])->where('z_score',$imp)->first();
         $result = [];
@@ -259,7 +290,6 @@ class SimulatorController extends Controller
          $data = DB::table('kategori_status_gizi')->where('type',$arr['type'])->where('z_score', 'like', '%' .$imp. '%')->first();
          if($data)
          {
-           // $arr['data'] = $data;
             $bobot = $data->bobot;
          }
         }

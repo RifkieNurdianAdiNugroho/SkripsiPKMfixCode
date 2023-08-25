@@ -155,7 +155,9 @@
                                     <th class="min-w-125px">Gakin</th>
                                     <th class="min-w-125px">Anak Ke</th>
                                     <th class="min-w-125px">Alamat</th>
+                                    @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'bidan')
                                     <th class="text-end min-w-100px">Actions</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody class="text-gray-600 fw-bold">

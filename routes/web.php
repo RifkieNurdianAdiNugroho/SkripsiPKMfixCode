@@ -12,6 +12,7 @@ use App\Http\Controllers\JadwalPosController;
 use App\Http\Controllers\JadwalVitaminController;
 use App\Http\Controllers\DataTimbangController;
 use App\Http\Controllers\SimulatorController;
+use App\Http\Controllers\DataController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,6 +30,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/data_dummy', [DataController::class, 'dataDummy']);
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::prefix('user')->group(function () {

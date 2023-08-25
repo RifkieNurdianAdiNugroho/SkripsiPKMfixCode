@@ -78,7 +78,9 @@
                                     <th class="min-w-125px">Desa</th>
                                     <th class="min-w-125px">Alamat</th>
                                     <th class="min-w-125px">Bidan</th>
+                                    @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'bidan')
                                     <th class="text-end min-w-100px">Actions</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody class="text-gray-600 fw-bold">
@@ -101,6 +103,7 @@
                                             -
                                             @endif
                                         </td>
+                                        @if(Auth::user()->role == 'ahli_gizi' || Auth::user()->role == 'bidan')
                                         <td class="text-end">
                                             <a href="#" class="btn btn-light btn-active-light-primary btn-sm"
                                                 data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
@@ -130,6 +133,7 @@
                                                 
                                             </div>
                                         </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

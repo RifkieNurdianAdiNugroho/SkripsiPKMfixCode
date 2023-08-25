@@ -25,6 +25,7 @@ class DataTimbangController extends Controller
         $getJadwal = DB::table('posyandu_jadwal as pj');
         $getJadwal->join('bidan as bd','bd.id','=','pj.bidan_id');
         $getJadwal->join('posyandu as pd','pd.id','=','pj.posyandu_id');
+        
         if($role == 'bidan')
         {
             $getJadwal->where('pj.bidan_id',$bidan->id);
@@ -67,6 +68,7 @@ class DataTimbangController extends Controller
         $jadwal = $getJadwal->get();
 
         $balitaArr = [];
+        $bidanId = 0;
         if($request->pos_id != null || $request->bidan_id != null)
         {
             $bidanId = 0;
@@ -107,7 +109,18 @@ class DataTimbangController extends Controller
         //dd($balita);
         if($role == 'ahli_gizi' || $role == 'kapus')
         {
-            $posyandu = DB::table('posyandu')->get();
+            if($request->bidan_id =! null)
+            {
+                 $posyandu = DB::table('posyandu as pd')
+                            ->join('posyandu_bidan as pb','pb.posyandu_id','=','pd.id')
+                            ->where('pb.bidan_id',$bidanId)
+                            ->select('pd.*')
+                            ->groupBy('pd.id')
+                            ->get();
+            }else
+            {
+                $posyandu = DB::table('posyandu')->get();
+            }
         }else
         {
             $posyandu = DB::table('posyandu as pd')
@@ -126,7 +139,11 @@ class DataTimbangController extends Controller
                 $bulan = Carbon::parse($jadwalValue->tanggal)->locale('id')
                         ->settings(['formatFunction' => 'translatedFormat'])
                         ->format('F');
+                $tahun = Carbon::parse($jadwalValue->tanggal)->locale('id')
+                        ->settings(['formatFunction' => 'translatedFormat'])
+                        ->format('Y');
                 $data['bulan'][$jadwalKey] = $bulan;
+                $data['tahun'][$jadwalKey] = $tahun;
                 $data['jadwal'][$jadwalKey]['bidan_id'] = $jadwalValue->bidan_id;
                 $data['jadwal'][$jadwalKey]['pos_id'] = $jadwalValue->posyandu_id;
                 $data['jadwal'][$jadwalKey]['jadwal_id'] = $jadwalValue->id;
@@ -172,7 +189,7 @@ class DataTimbangController extends Controller
         }
         $bidan = DB::table('bidan')->get();
         Session::put('dataTimbang',$data);
-        return view('dashboard.timbang.index',compact('data','now','posyandu','request','bidan','role'));
+        return view('dashboard.timbang.index',compact('data','now','posyandu','request','bidan','role','bidanId'));
     }
 
     public function exportExcel()

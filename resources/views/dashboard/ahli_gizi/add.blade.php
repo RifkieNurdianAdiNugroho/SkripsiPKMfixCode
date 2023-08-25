@@ -74,8 +74,8 @@
                                     <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip"
                                         title="Email aktif"></i>
                                 </label>
-                                <input type="email" onblur="validateEmail(this);" required class="form-control form-control-solid"
-                                    name="email" value="" placeholder="Cth : sari@gmail.com"/>
+                                <input type="text" onblur="validateEmail(this);" required class="form-control form-control-solid"
+                                    name="email_aktif" autocomplete="chrome-off" placeholder="Cth : sari@gmail.com"/>
                             </div>
                             <div class="mb-10 fv-row" data-kt-password-meter="true">
                                 <div class="mb-1">
@@ -86,7 +86,7 @@
                                     </label>
                                     <div class="position-relative mb-3">
                                         <input class="form-control form-control-lg form-control-solid" type="password"
-                                            placeholder="******" name="password" autocomplete="off" />
+                                            placeholder="******" name="password"  autocomplete="new-password" />
                                         <span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2"
                                             data-kt-password-meter-control="visibility">
                                             <i class="bi bi-eye-slash fs-2"></i>
